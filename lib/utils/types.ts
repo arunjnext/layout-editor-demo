@@ -1,23 +1,5 @@
 // Types for resume data structure
 
-export interface LexicalNode {
-  type: string
-  text?: string
-  children?: LexicalNode[]
-  [key: string]: any
-}
-
-export interface LexicalEditorState {
-  root: {
-    type: string
-    direction: string
-    format: string
-    indent: number
-    version: number
-    children: LexicalNode[]
-  }
-}
-
 export interface SocialLink {
   id?: string
   url: string
@@ -28,7 +10,7 @@ export interface ExperienceItem {
   id?: string
   title?: string
   subTitle?: string
-  description?: LexicalEditorState
+  description?: string
   isVisible?: boolean
   startMonth?: string
   startYear?: string
@@ -43,7 +25,7 @@ export interface EducationItem {
   id?: string
   title?: string
   subTitle?: string
-  description?: LexicalEditorState
+  description?: string
   isVisible?: boolean
   startMonth?: string
   startYear?: string
@@ -64,7 +46,7 @@ export interface ProficiencyItem {
   id?: string
   title?: string
   subTitle?: string
-  description?: LexicalEditorState
+  description?: string
   isVisible?: boolean
   startMonth?: string
   startYear?: string
@@ -75,7 +57,7 @@ export interface CustomSectionItem {
   id?: string
   title?: string
   subTitle?: string
-  description?: LexicalEditorState
+  description?: string
   isVisible?: boolean
   startMonth?: string
   startYear?: string
@@ -114,7 +96,7 @@ export interface ResumeData {
   lastName: string
   email: string
   phone: string
-  summary: LexicalEditorState
+  summary: string
   profileImage: string | null
   showProfileImage: boolean
   links: SocialLink[]

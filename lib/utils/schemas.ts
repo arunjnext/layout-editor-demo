@@ -22,7 +22,7 @@ export const commonSchema = {
   firstName: z.string(),
   lastName: z.string(),
   jobTitle: z.string(),
-  summary: z.object({}).passthrough(),
+  summary: z.string(),
   phone: z.string(),
   email: z.string()
 }

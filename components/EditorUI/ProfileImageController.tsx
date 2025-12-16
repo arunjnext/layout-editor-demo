@@ -3,7 +3,12 @@
 import { Image as ImageIcon, Loader2, X } from "lucide-react";
 import Image from "next/image";
 import { useRef, useState } from "react";
-import { useController, type Control } from "react-hook-form";
+import {
+  useController,
+  type Control,
+  type FieldValues,
+  type Path,
+} from "react-hook-form";
 
 interface ProfileImageProps {
   profileImageUrl?: string | null;
@@ -94,21 +99,21 @@ const ProfileImage = ({
   );
 };
 
-interface ProfileImageControllerProps {
-  name: string;
-  control: Control<any>;
+interface ProfileImageControllerProps<T extends FieldValues = FieldValues> {
+  name: Path<T>;
+  control: Control<T>;
   profileImageUrl?: string | null;
   onImageChange?: (file: File | null) => void;
 }
 
-export const ProfileImageController = ({
+export const ProfileImageController = <T extends FieldValues = FieldValues>({
   name,
   control,
   profileImageUrl,
   onImageChange,
-}: ProfileImageControllerProps) => {
+}: ProfileImageControllerProps<T>) => {
   const {
-    field: { onChange, value, ...field },
+    field: { onChange },
   } = useController({
     name,
     control,

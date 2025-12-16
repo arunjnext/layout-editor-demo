@@ -11,11 +11,11 @@ import { EditorFormFieldGroup } from "@/components/EditorUI/EditorFormFieldGroup
 import { EditorFormTitle } from "@/components/EditorUI/EditorFormTitle";
 import { EditorPanelHeader } from "@/components/EditorUI/EditorPanelHeader";
 import { ProfileImageController } from "@/components/EditorUI/ProfileImageController";
-import { RichTextField } from "@/components/RichTextField/RichTextField";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
 import { useCustomUndoRedo } from "@/hooks/useCustomUndoRedo";
 import { useFieldRemove } from "@/hooks/useFieldRemove";
 import { useFormWatch } from "@/hooks/useFormWatch";
@@ -112,9 +112,9 @@ export const PersonalDetails = ({
         <form className="space-y-6 divide-y divide-border [&>*:not(:first-child)]:pt-6">
           <EditorFormBlock>
             <EditorFormTitle title={tc.yourDetails} />
-            <EditorFieldRow className="gap-6">
-              <div className="flex shrink-0 flex-col gap-2">
-                <EditorFieldItem>
+            <EditorFieldRow className="gap-6 items-start">
+              <div className="flex shrink-0 flex-col gap-3">
+                <EditorFieldItem className="gap-0!">
                   <EditorFieldLabel className="sr-only" htmlFor="profileImage">
                     {tc.addAProfileImage}
                   </EditorFieldLabel>
@@ -124,7 +124,7 @@ export const PersonalDetails = ({
                     profileImageUrl={resume?.profileImage?.url}
                   />
                 </EditorFieldItem>
-                <EditorFieldItem>
+                <EditorFieldItem className="gap-0!">
                   <EditorFieldCheckbox>
                     <Controller
                       name="showProfileImage"
@@ -145,9 +145,9 @@ export const PersonalDetails = ({
                   </EditorFieldCheckbox>
                 </EditorFieldItem>
               </div>
-              <EditorFormFieldGroup>
+              <EditorFormFieldGroup className="flex-1">
                 <EditorFieldRow className="flex-row">
-                  <EditorFieldItem>
+                  <EditorFieldItem className="flex-1">
                     <EditorFieldLabel htmlFor="firstName">
                       {tc.firstName}
                     </EditorFieldLabel>
@@ -157,7 +157,7 @@ export const PersonalDetails = ({
                       {...register(`firstName`)}
                     />
                   </EditorFieldItem>
-                  <EditorFieldItem>
+                  <EditorFieldItem className="flex-1">
                     <EditorFieldLabel htmlFor="lastName">
                       {tc.lastName}
                     </EditorFieldLabel>
@@ -191,21 +191,11 @@ export const PersonalDetails = ({
                   <EditorFieldLabel className="sr-only" htmlFor="summary">
                     {tc.summary}
                   </EditorFieldLabel>
-                  <Controller
-                    name="summary"
-                    control={form.control}
-                    render={({ field }) => (
-                      <RichTextField
-                        value={field.value}
-                        onChange={(content) => {
-                          field.onChange(content);
-                        }}
-                        placeholder={tc.summary}
-                        section="personalDetails"
-                        metadata={{ jobTitle: resume?.jobTitle }}
-                        currentContent={field.value}
-                      />
-                    )}
+                  <Textarea
+                    id="summary"
+                    placeholder={tc.summary}
+                    {...register("summary")}
+                    rows={6}
                   />
                 </EditorFieldItem>
               </EditorFieldRow>
@@ -214,8 +204,8 @@ export const PersonalDetails = ({
           <EditorFormBlock>
             <EditorFormTitle title={tc.contactDetails} />
             <EditorFormFieldGroup>
-              <EditorFieldRow>
-                <EditorFieldItem>
+              <EditorFieldRow className="flex-row">
+                <EditorFieldItem className="flex-1">
                   <EditorFieldLabel htmlFor="phone">
                     {tc.phone}
                   </EditorFieldLabel>
@@ -225,7 +215,7 @@ export const PersonalDetails = ({
                     {...register(`phone`)}
                   />
                 </EditorFieldItem>
-                <EditorFieldItem>
+                <EditorFieldItem className="flex-1">
                   <EditorFieldLabel htmlFor="email">
                     {tc.email}
                   </EditorFieldLabel>
@@ -243,8 +233,8 @@ export const PersonalDetails = ({
             <EditorFormFieldGroup>
               {fields.map((field, index) => (
                 <div key={field.id}>
-                  <EditorFieldRow className="flex-col sm:flex-row">
-                    <EditorFieldItem>
+                  <EditorFieldRow className="flex-row items-end gap-2">
+                    <EditorFieldItem className="flex-1">
                       <EditorFieldLabel htmlFor={`links.${index}.name`}>
                         {tc.name}
                       </EditorFieldLabel>
@@ -254,27 +244,25 @@ export const PersonalDetails = ({
                         {...register(`links.${index}.name`)}
                       />
                     </EditorFieldItem>
-                    <EditorFieldItem className="flex-row">
-                      <EditorFieldItem>
-                        <EditorFieldLabel htmlFor={`links.${index}.url`}>
-                          {tc.url}
-                        </EditorFieldLabel>
-                        <Input
-                          type="url"
-                          placeholder={tc.url}
-                          {...register(`links.${index}.url`)}
-                        />
-                      </EditorFieldItem>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleRemove(index)}
-                        className="mt-6"
-                      >
-                        <X size={16} />
-                      </Button>
+                    <EditorFieldItem className="flex-1">
+                      <EditorFieldLabel htmlFor={`links.${index}.url`}>
+                        {tc.url}
+                      </EditorFieldLabel>
+                      <Input
+                        type="url"
+                        placeholder={tc.url}
+                        {...register(`links.${index}.url`)}
+                      />
                     </EditorFieldItem>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleRemove(index)}
+                      className="shrink-0 h-10 w-10"
+                    >
+                      <X size={16} />
+                    </Button>
                   </EditorFieldRow>
                 </div>
               ))}

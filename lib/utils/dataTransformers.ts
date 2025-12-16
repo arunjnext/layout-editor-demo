@@ -1,50 +1,26 @@
-export interface LexicalNode {
-  type: string
-  text?: string
-  children?: LexicalNode[]
-  [key: string]: any
-}
-
-export interface LexicalRoot {
-  root: {
-    type: string
-    direction: string
-    format: string
-    indent: number
-    version: number
-    children: LexicalNode[]
+// Helper to convert Lexical JSON to plain text string (for backward compatibility)
+const convertLexicalToString = (value: any): string => {
+  if (typeof value === 'string') {
+    return value
   }
-}
-
-const defaultDescription: LexicalRoot = {
-  root: {
-    type: 'root',
-    direction: 'ltr',
-    format: '',
-    indent: 0,
-    version: 1,
-    children: [
-      {
-        children: [
-          {
-            detail: 0,
-            format: 0,
-            mode: 'normal',
-            style: '',
-            text: '',
-            type: 'text',
-            version: 1
-          }
-        ],
-        direction: 'ltr',
-        format: '',
-        indent: 0,
-        type: 'paragraph',
-        textFormat: 0,
-        version: 1
+  if (value && typeof value === 'object') {
+    // Try to extract text from Lexical structure
+    if (value.root && value.root.children) {
+      const extractText = (node: any): string => {
+        if (node.text) {
+          return node.text
+        }
+        if (node.children && Array.isArray(node.children)) {
+          return node.children.map(extractText).join('')
+        }
+        return ''
       }
-    ]
+      return value.root.children.map(extractText).join('\n')
+    }
+    // If it's an object but not Lexical structure, return empty string
+    return ''
   }
+  return value || ''
 }
 
 export const removeId = <T extends { id?: string }>(item: T): Omit<T, 'id'> => {
@@ -70,7 +46,7 @@ export interface ResumeData {
   firstName?: string
   lastName?: string
   jobTitle?: string
-  summary?: LexicalRoot
+  summary?: string
   phone?: string
   email?: string
   links?: SocialLink[]
@@ -89,7 +65,7 @@ export const resumeValues = {
       firstName: data?.firstName || '',
       lastName: data?.lastName || '',
       jobTitle: data?.jobTitle || '',
-      summary: data?.summary || defaultDescription,
+      summary: convertLexicalToString(data?.summary),
       phone: data?.phone || '',
       email: data?.email || '',
       links: resumeValues.links(data)
@@ -118,5 +94,3 @@ export const resumeValues = {
     return key ? { [key]: data } : data?.design
   }
 }
-
-export { defaultDescription }

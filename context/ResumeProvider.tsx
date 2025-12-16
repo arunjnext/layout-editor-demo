@@ -20,8 +20,8 @@ export interface ResumeContextValue {
   updateResumeError: Error | null;
   undo: () => void;
   redo: () => void;
-  undoStack: any[];
-  redoStack: any[];
+  undoStack: unknown[];
+  redoStack: unknown[];
   isSaving: boolean;
   updateResumeAsync: (
     update: Partial<Resume>,
@@ -108,8 +108,8 @@ export const ResumeProvider = ({
       updateResume,
       isUpdatingResume: isSaving,
       updateResumeError: null,
-      undo: () => {}, // Placeholder - can be implemented if needed
-      redo: () => {}, // Placeholder - can be implemented if needed
+      undo: () => {},
+      redo: () => {},
       undoStack: [],
       redoStack: [],
       isSaving,

@@ -25,7 +25,7 @@ const defaultTranslations: Record<string, string> = {
 interface AccordionWrapperProps {
   children: ReactNode;
   fields: Array<{ id: string }>;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export const AccordionWrapper = ({
@@ -38,14 +38,15 @@ export const AccordionWrapper = ({
 
   useEffect(() => {
     if (fields.length > 0 && fields.length > lastLength.current) {
-      setActiveAccordion([fields[fields.length - 1].id]);
+      setTimeout(() => {
+        setActiveAccordion([fields[fields.length - 1].id]);
+      }, 0);
     }
     lastLength.current = fields.length;
   }, [fields]);
 
   return (
     <Accordion
-      type="multiple"
       value={activeAccordion}
       {...props}
       onValueChange={(value) => {
@@ -58,46 +59,21 @@ export const AccordionWrapper = ({
 };
 
 interface ReorderGroupProps {
-  as?: string;
-  axis?: "x" | "y";
   className?: string;
-  values: any[];
-  onReorder: (newOrder: any[]) => void;
   children: ReactNode;
 }
 
-export const ReorderGroup = ({
-  as = "div",
-  axis = "y",
-  className,
-  values,
-  onReorder,
-  children,
-}: ReorderGroupProps) => {
-  return (
-    <div className={cn("space-y-2.5", className)}>
-      {children}
-    </div>
-  );
+export const ReorderGroup = ({ className, children }: ReorderGroupProps) => {
+  return <div className={cn("space-y-2.5", className)}>{children}</div>;
 };
 
 interface ReorderItemProps {
   id: string;
-  value: any;
-  dragListener?: boolean;
-  dragControls?: any;
   className?: string;
   children: ReactNode;
 }
 
-export const ReorderItem = ({
-  id,
-  value,
-  dragListener,
-  dragControls,
-  className,
-  children,
-}: ReorderItemProps) => {
+export const ReorderItem = ({ id, className, children }: ReorderItemProps) => {
   return (
     <div id={id} className={className}>
       {children}
@@ -139,28 +115,13 @@ export const AddSection = ({
 
 interface SectionItemProps {
   id: string;
-  value: any;
-  dragListener?: boolean;
-  dragControls?: any;
   children: ReactNode;
   className?: string;
 }
 
-export const SectionItem = ({
-  id,
-  value,
-  dragListener,
-  dragControls,
-  children,
-  className,
-}: SectionItemProps) => {
+export const SectionItem = ({ id, children, className }: SectionItemProps) => {
   return (
-    <ReorderItem
-      id={id}
-      value={value}
-      dragListener={dragListener}
-      dragControls={dragControls}
-    >
+    <ReorderItem id={id}>
       <AccordionItem
         value={id}
         className={cn(
@@ -188,10 +149,7 @@ export const SectionReorder = ({
   return (
     <GripVertical
       size={size}
-      className={cn(
-        "text-muted-foreground cursor-grab flex-shrink-0",
-        className
-      )}
+      className={cn("text-muted-foreground cursor-grab shrink-0", className)}
       onPointerDown={dragHandler}
     />
   );

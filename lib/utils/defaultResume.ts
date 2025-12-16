@@ -1,4 +1,4 @@
-import { defaultDescription, newSocialLink } from './dataTransformers'
+import { newSocialLink } from './dataTransformers'
 import { resumeOptionValue } from './resumeConstants'
 
 export interface ResumeSection {
@@ -53,7 +53,7 @@ export const createDefaultResume = (): Resume => ({
   lastName: '',
   email: '',
   phone: '',
-  summary: defaultDescription,
+  summary: '',
   profileImage: null,
   showProfileImage: true,
   links: [newSocialLink],

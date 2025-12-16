@@ -1,23 +1,23 @@
-'use client'
+"use client";
 
-import { useEditor } from '@/hooks/useEditor'
-import { resumeOptionValue } from '@/lib/utils/resumeConstants'
 import {
   EditorSectionReorder,
-  EditorSectionVisibility
-} from '@/components/EditorUI/EditorSectionPanel'
-import type { EditorSection } from '@/lib/utils/resumeConstants'
+  EditorSectionVisibility,
+} from "@/components/EditorUI/EditorSectionPanel";
+import { Button } from "@/components/ui/button";
 import {
   Item,
-  ItemMedia,
+  ItemActions,
   ItemContent,
-  ItemTitle,
   ItemDescription,
-  ItemActions
-} from '@/components/ui/item'
-import { cn } from '@/lib/utils/helpers'
-import { Button } from '@/components/ui/button'
-import { ChevronRight } from 'lucide-react'
+  ItemMedia,
+  ItemTitle,
+} from "@/components/ui/item";
+import { useEditor } from "@/hooks/useEditor";
+import { cn } from "@/lib/utils/helpers";
+import type { EditorSection } from "@/lib/utils/resumeConstants";
+import { resumeOptionValue } from "@/lib/utils/resumeConstants";
+import { ChevronRight } from "lucide-react";
 
 const defaultTranslations: Record<string, string> = {
   personalDetails: "Personal Details",
@@ -34,27 +34,37 @@ const defaultTranslations: Record<string, string> = {
     "Where you studied and your qualifications",
   certificatesAndLanguages: "Certificates and languages",
   showcaseUniqueExperiences: "Showcase unique experiences",
-}
+};
 
 interface EditorPanelItemProps {
-  section: EditorSection & { id: string; sectionKey: string; isVisible: boolean }
-  translations?: Record<string, string>
+  section: EditorSection & {
+    id: string;
+    sectionKey: string;
+    isVisible: boolean;
+  };
+  translations?: Record<string, string>;
 }
 
-export const EditorPanelItem = ({ section, translations = {} }: EditorPanelItemProps) => {
-  const { handlePanelClick, sectionsVisibility, visiblityControls } = useEditor()
-  const { id, sectionKey } = section
-  const isVisible = id in sectionsVisibility ? sectionsVisibility[id] : section.isVisible
-  const isPersonalDetails = sectionKey === resumeOptionValue.personalDetails
-  
-  const { title, description, icon: Icon, sectionName } = section
-  const tc = { ...defaultTranslations, ...translations }
-  
-  const displayTitle = title === sectionName ? tc[title] || sectionName : sectionName
-  const displayDescription = tc[description] || description
+export const EditorPanelItem = ({
+  section,
+  translations = {},
+}: EditorPanelItemProps) => {
+  const { handlePanelClick, sectionsVisibility, visiblityControls } =
+    useEditor();
+  const { id, sectionKey } = section;
+  const isVisible =
+    id in sectionsVisibility ? sectionsVisibility[id] : section.isVisible;
+  const isPersonalDetails = sectionKey === resumeOptionValue.personalDetails;
+
+  const { title, description, icon: Icon, sectionKey: sectionName } = section;
+  const tc = { ...defaultTranslations, ...translations };
+
+  const displayTitle =
+    title === sectionName ? tc[title] || sectionName : sectionName;
+  const displayDescription = tc[description] || description;
 
   return (
-    <div id={id} className='relative'>
+    <div id={id} className="relative">
       <Item
         variant="outline"
         size="default"
@@ -68,14 +78,13 @@ export const EditorPanelItem = ({ section, translations = {} }: EditorPanelItemP
         <EditorSectionReorder
           dragControls={undefined}
           isVisible={isVisible}
-          className={cn(
-            isPersonalDetails && 'invisible'
-          )}
+          className={cn(isPersonalDetails && "invisible")}
         />
-        <ItemMedia variant="icon">
-          <span className="flex items-center justify-center bg-accent rounded-[10px] p-1.5">
-            <Icon className="text-muted-foreground size-5" />
-          </span>
+        <ItemMedia
+          variant="icon"
+          className="bg-accent rounded-[10px] p-1.5 h-full flex items-center justify-center"
+        >
+          <Icon className="text-muted-foreground size-5" />
         </ItemMedia>
         <ItemContent>
           <ItemTitle className="text-foreground max-w-52 w-full truncate sm:max-w-80">
@@ -92,8 +101,8 @@ export const EditorPanelItem = ({ section, translations = {} }: EditorPanelItemP
             <Button
               type="button"
               onClick={(e) => {
-                e.stopPropagation()
-                handlePanelClick(sectionKey)
+                e.stopPropagation();
+                handlePanelClick(sectionKey);
               }}
               variant="ghost"
               size="sm"
@@ -106,6 +115,5 @@ export const EditorPanelItem = ({ section, translations = {} }: EditorPanelItemP
         </ItemActions>
       </Item>
     </div>
-  )
-}
-
+  );
+};
