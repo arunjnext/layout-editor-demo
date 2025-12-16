@@ -1,44 +1,32 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
-import type { ReactNode } from 'react'
-import { resumeOptionValue } from '@/lib/utils/resumeConstants'
+import { resumeOptionValue } from "@/lib/utils/resumeConstants";
+import type { ReactNode } from "react";
+import { useEffect, useState } from "react";
 
 interface EditorSheetProps {
-  isSheetActive: boolean
-  activePanelId: string | null
-  children: ReactNode
+  isSheetActive: boolean;
+  activePanelId: string | null;
+  children: ReactNode;
 }
 
-const useMediaQuery = (query: string): boolean => {
-  const [matches, setMatches] = useState(false)
-  const [mounted, setMounted] = useState(false)
+const useMediaQuery = (): boolean => {
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true)
-    const media = window.matchMedia(query)
-    setMatches(media.matches)
-    
-    const listener = () => setMatches(media.matches)
-    media.addEventListener('change', listener)
-    return () => media.removeEventListener('change', listener)
-  }, [query])
+    setTimeout(() => {
+      setMounted(true);
+    }, 0);
+  }, []);
 
-  // Return false during SSR and initial render to prevent hydration mismatch
-  if (!mounted) {
-    return false
-  }
+  return mounted;
+};
 
-  return matches
-}
-
-export const EditorSheet = ({ isSheetActive, activePanelId, children }: EditorSheetProps) => {
-  const isDesktop = useMediaQuery('(min-width: 1024px)')
-
-  if (!isDesktop) {
-    return null
-  }
-
+export const EditorSheet = ({
+  isSheetActive,
+  activePanelId,
+  children,
+}: EditorSheetProps) => {
   // Validate activePanelId before rendering
   const validSectionIds: string[] = [
     resumeOptionValue.personalDetails,
@@ -47,19 +35,19 @@ export const EditorSheet = ({ isSheetActive, activePanelId, children }: EditorSh
     resumeOptionValue.education,
     resumeOptionValue.proficiencies,
     resumeOptionValue.customSections,
-  ]
+  ];
 
-  const isValidPanelId = activePanelId !== null && validSectionIds.includes(activePanelId)
-  const shouldRender = isSheetActive && isValidPanelId
+  const isValidPanelId =
+    activePanelId !== null && validSectionIds.includes(activePanelId);
+  const shouldRender = isSheetActive && isValidPanelId;
 
   if (!shouldRender) {
-    return null
+    return null;
   }
 
   return (
-    <div className='absolute inset-0 flex-auto bg-background overflow-y-auto thin-scrollbar will-change-transform scrollbar-stable p-4 lg:p-6'>
+    <div className="absolute inset-0 flex-auto bg-background overflow-y-auto thin-scrollbar will-change-transform scrollbar-stable p-4 lg:p-6">
       {children}
     </div>
-  )
-}
-
+  );
+};

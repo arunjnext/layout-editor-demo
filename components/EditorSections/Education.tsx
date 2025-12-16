@@ -1,17 +1,20 @@
-import { resumeOptionValue } from '@/lib/utils/resumeConstants'
-import { EditorPanelHeader } from '@/components/EditorUI/EditorPanelHeader'
+import { EditorPanelHeader } from "@/components/EditorUI/EditorPanelHeader";
+import { editorSections, resumeOptionValue } from "@/lib/utils/resumeConstants";
 
 export const Education = () => {
   return (
     <>
       <EditorPanelHeader
         sectionKey={resumeOptionValue.education}
-        description='whereYouStudiedAndYourQualifications'
+        description={
+          editorSections.find(
+            (section) => section.id === resumeOptionValue.education
+          )?.description
+        }
       />
-      <div className='p-4 text-muted-foreground'>
+      <div className="p-4 text-muted-foreground">
         Education section - To be implemented
       </div>
     </>
-  )
-}
-
+  );
+};

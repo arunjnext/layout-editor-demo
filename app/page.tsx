@@ -15,13 +15,13 @@ export default function Page() {
       <ResumeFormProvider>
         <EditorProvider>
           <div className="h-screen w-full flex overflow-hidden">
-            {/* Left column: Resume Preview */}
-            <div className="flex-1 h-full overflow-hidden border-r border-border">
+            {/* Left column: Resume Preview - Hidden on mobile and tablet */}
+            <div className="hidden lg:flex flex-1 h-full overflow-hidden border-r border-border">
               <ResumePreview />
             </div>
 
-            {/* Right column: Editor Panel */}
-            <div className="flex-1 h-full max-w-xl overflow-hidden bg-background">
+            {/* Right column: Editor Panel - Full width on mobile/tablet */}
+            <div className="flex-1 h-full lg:max-w-xl overflow-hidden bg-background">
               <EditorPanel />
             </div>
           </div>

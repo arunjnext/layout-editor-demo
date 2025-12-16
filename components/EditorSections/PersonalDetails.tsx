@@ -79,7 +79,7 @@ export const PersonalDetails = () => {
                 </EditorFieldLabel>
                 <ProfileImageController
                   name="profileImage"
-                  profileImageUrl={resume?.profileImage?.url}
+                  profileImageUrl={resume?.profileImage}
                 />
               </EditorFieldItem>
               <EditorFieldItem className="gap-0!">

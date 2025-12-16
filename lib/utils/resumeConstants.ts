@@ -78,36 +78,36 @@ export const editorSections: EditorSection[] = [
     id: resumeOptionValue.personalDetails,
     icon: UserRound,
     title: 'personalDetails',
-    description: 'yourNameSummaryImageAndTitle'
+    description: 'Your name, summary, image and title'
   },
   {
     id: resumeOptionValue.experience,
     icon: BriefcaseBusiness,
     title: 'experience',
-    description: 'yourWorkHistoryAndAchievements'
+    description: 'Your work history and achievements'
   },
   {
     id: resumeOptionValue.skills,
     icon: Lightbulb,
     title: 'skills',
-    description: 'keyAreasThatIllustrateYourStrengths'
+    description: 'Key areas that illustrate your strengths'
   },
   {
     id: resumeOptionValue.education,
     icon: GraduationCap,
     title: 'education',
-    description: 'whereYouStudiedAndYourQualifications'
+    description: 'Where you studied and your qualifications'
   },
   {
     id: resumeOptionValue.proficiencies,
     icon: FilePlus,
     title: 'proficiencies',
-    description: 'certificatesAndLanguages'
+    description: 'Certificates and languages'
   },
   {
     id: resumeOptionValue.customSections,
     icon: Smile,
     title: 'customSections',
-    description: 'showcaseUniqueExperiences'
+    description: 'Showcase your unique experiences'
   }
 ]

@@ -33,7 +33,7 @@ interface EditorPanelHeaderProps {
 export const EditorPanelHeader = ({
   sectionKey,
   description,
-  editable = true,
+  editable = false,
 }: EditorPanelHeaderProps) => {
   return (
     <div className="border-b border-border pb-4 mb-6">
@@ -57,7 +57,7 @@ export const EditorPanelHeader = ({
           variant="sm"
           className="block leading-5 text-muted-foreground mt-1"
         >
-          {defaultTranslations[description] || description}
+          {description}
         </Text>
       )}
     </div>
@@ -115,15 +115,7 @@ const TitleEditable = ({ sectionKey }: TitleEditableProps) => {
       }
       setIsEditSectionTitle(false);
     },
-    [
-      initialName,
-      resume.design,
-      sectionKey,
-      design,
-      updateResume,
-      reset,
-      value,
-    ]
+    [initialName, resume.design, sectionKey, design, updateResume, reset, value]
   );
 
   useEffect(() => {
