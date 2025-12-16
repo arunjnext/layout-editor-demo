@@ -49,7 +49,7 @@ export const EditorContent = ({
   // Handle null activePanelId
   if (!activePanelId) {
     return (
-      <div className="flex flex-col items-center justify-center h-full gap-4 p-8">
+      <div className="flex flex-col items-center justify-center h-full gap-6 px-6 py-12">
         <Text
           as="p"
           variant="sm"
@@ -87,7 +87,7 @@ export const EditorContent = ({
     default: {
       // Fallback UI for invalid activePanelId
       return (
-        <div className="flex flex-col items-center justify-center h-full gap-4 p-8">
+        <div className="flex flex-col items-center justify-center h-full gap-6 px-6 py-12">
           <Text
             as="p"
             variant="sm"

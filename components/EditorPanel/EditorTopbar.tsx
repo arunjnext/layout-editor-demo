@@ -16,7 +16,7 @@ interface EditorTopbarProps {
 
 export const EditorTopbar = ({ children }: EditorTopbarProps) => {
   return (
-    <div className='bg-background border-b border-border flex items-center justify-between p-4 lg:p-5'>
+    <div className='bg-background border-b border-border flex items-center justify-between px-4 lg:px-6 py-5'>
       {children}
     </div>
   )

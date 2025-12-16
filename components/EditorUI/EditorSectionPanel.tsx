@@ -37,7 +37,7 @@ export const EditorSectionPanel = ({
   return (
     <div
       className={cn(
-        "relative flex items-center gap-3  border-b border-border transition-all select-none bg-background pl-4 lg:pl-5",
+        "relative flex items-center gap-3 border-b border-border transition-all select-none bg-background px-4 lg:px-6 py-2",
         isVisible ? "hover:bg-background-alt" : ""
       )}
     >
@@ -69,14 +69,14 @@ export const EditorSectionDetails = ({
       type="button"
       onClick={onClick}
       className={cn(
-        "flex-1 flex items-center justify-start gap-3 px-0 py-4 [&_svg]:size-5 disabled:opacity-35 "
+        "flex-1 flex items-center justify-start gap-3 px-0 py-5 [&_svg]:size-5 disabled:opacity-35 "
       )}
       disabled={!isVisible}
     >
       <span className="flex items-center justify-center bg-accent rounded-[10px] p-1.5">
         <Icon className="text-muted-foreground" />
       </span>
-      <div className="flex flex-col gap-1 text-left">
+      <div className="flex flex-col gap-1.5 text-left">
         <Text
           as="span"
           variant="sm"
@@ -99,23 +99,17 @@ export const EditorSectionDetails = ({
 };
 
 interface EditorSectionReorderProps {
-  dragControls: any;
+  dragControls?: any;
   isVisible: boolean;
   className?: string;
 }
 
 export const EditorSectionReorder = ({
-  dragControls,
   isVisible,
   className,
 }: EditorSectionReorderProps) => {
   return (
     <div
-      onPointerDown={(event) => {
-        if (isVisible) {
-          dragControls.start(event);
-        }
-      }}
       className={cn(
         "flex items-center gap-2",
         isVisible ? "cursor-grab" : "cursor-not-allowed opacity-35",
@@ -143,7 +137,7 @@ export const EditorSectionTrigger = ({
       variant="ghost"
       size="sm"
       disabled={!isVisible}
-      className="absolute right-0 inset-y-0 py-5 pr-5 disabled:opacity-35"
+      className="absolute right-0 inset-y-0 py-5 pr-4 lg:pr-6 disabled:opacity-35"
     >
       <ChevronRight size={16} className="text-muted-foreground" />
     </Button>

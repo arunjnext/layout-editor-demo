@@ -11,7 +11,6 @@ import { Text } from "@/components/ui/text";
 import { useEditor } from "@/hooks/useEditor";
 import { cn } from "@/lib/utils/helpers";
 import { Eye, EyeOff, GripVertical, Plus, Trash2 } from "lucide-react";
-import { AnimatePresence, Reorder, motion } from "motion/react";
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 
@@ -76,15 +75,9 @@ export const ReorderGroup = ({
   children,
 }: ReorderGroupProps) => {
   return (
-    <Reorder.Group
-      as={as as any}
-      axis={axis}
-      className={cn("space-y-2.5", className)}
-      values={values}
-      onReorder={onReorder}
-    >
-      <AnimatePresence>{children}</AnimatePresence>
-    </Reorder.Group>
+    <div className={cn("space-y-2.5", className)}>
+      {children}
+    </div>
   );
 };
 
@@ -106,24 +99,9 @@ export const ReorderItem = ({
   children,
 }: ReorderItemProps) => {
   return (
-    <motion.div
-      key={id}
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ scale: 0.8, opacity: 0 }}
-      transition={{ duration: 0.3 }}
-    >
-      <Reorder.Item
-        as="div"
-        id={id}
-        value={value}
-        dragListener={dragListener}
-        dragControls={dragControls}
-        className={className}
-      >
-        {children}
-      </Reorder.Item>
-    </motion.div>
+    <div id={id} className={className}>
+      {children}
+    </div>
   );
 };
 

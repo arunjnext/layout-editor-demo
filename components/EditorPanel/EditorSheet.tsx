@@ -1,6 +1,5 @@
 'use client'
 
-import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
 import { resumeOptionValue } from '@/lib/utils/resumeConstants'
@@ -53,30 +52,14 @@ export const EditorSheet = ({ isSheetActive, activePanelId, children }: EditorSh
   const isValidPanelId = activePanelId !== null && validSectionIds.includes(activePanelId)
   const shouldRender = isSheetActive && isValidPanelId
 
+  if (!shouldRender) {
+    return null
+  }
+
   return (
-    <AnimatePresence>
-      {shouldRender && (
-        <motion.div
-          className='absolute inset-0 flex-auto bg-background overflow-y-auto thin-scrollbar will-change-transform scrollbar-stable p-4 lg:p-6'
-          initial={{ x: '10%', opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          exit={{ x: '10%', opacity: 0 }}
-          transition={{
-            x: {
-              type: 'spring',
-              stiffness: 300,
-              damping: 30,
-              mass: 0.5
-            },
-            opacity: {
-              duration: 0.1,
-              ease: 'easeOut'
-            }
-          }}>
-          {children}
-        </motion.div>
-      )}
-    </AnimatePresence>
+    <div className='absolute inset-0 flex-auto bg-background overflow-y-auto thin-scrollbar will-change-transform scrollbar-stable p-4 lg:p-6'>
+      {children}
+    </div>
   )
 }
 

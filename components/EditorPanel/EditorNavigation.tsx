@@ -30,7 +30,7 @@ export const EditorNavigation = ({ translations = {} }: EditorNavigationProps) =
   const tc = { ...defaultTranslations, ...translations }
 
   return (
-    <div className='px-4 py-3 bg-custom-gradient border-b border-border flex items-center justify-between'>
+    <div className='px-4 lg:px-6 py-4 bg-custom-gradient border-b border-border flex items-center justify-between'>
       {activeTab === 'editor' ? (
         <>
           {isSheetActive ? (

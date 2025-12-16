@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from 'react'
 import { Plus, X } from 'lucide-react'
-import { AnimatePresence, motion } from 'motion/react'
 import { Controller, useFieldArray, useForm } from 'react-hook-form'
 import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
@@ -224,64 +223,42 @@ export const PersonalDetails = ({ translations = {} }: PersonalDetailsProps) => 
           <EditorFormBlock>
             <EditorFormTitle title={tc.links} />
             <EditorFormFieldGroup>
-              <AnimatePresence>
-                {fields.map((field, index) => (
-                  <motion.div
-                    key={field.id}
-                    layout='position'
-                    layoutId={field.id}
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{
-                      id: 'exit-animation',
-                      opacity: 0
-                    }}
-                    onAnimationComplete={(definition) => {
-                      if (
-                        index === fields.length - 1 &&
-                        typeof definition === 'object' &&
-                        definition !== null &&
-                        'id' in definition &&
-                        definition.id === 'exit-animation'
-                      ) {
-                        remove(index)
-                      }
-                    }}>
-                    <EditorFieldRow className='flex-col sm:flex-row'>
+              {fields.map((field, index) => (
+                <div key={field.id}>
+                  <EditorFieldRow className='flex-col sm:flex-row'>
+                    <EditorFieldItem>
+                      <EditorFieldLabel htmlFor={`links.${index}.name`}>
+                        {tc.name}
+                      </EditorFieldLabel>
+                      <Input
+                        type='text'
+                        placeholder={tc.name}
+                        {...register(`links.${index}.name`)}
+                      />
+                    </EditorFieldItem>
+                    <EditorFieldItem className='flex-row'>
                       <EditorFieldItem>
-                        <EditorFieldLabel htmlFor={`links.${index}.name`}>
-                          {tc.name}
+                        <EditorFieldLabel htmlFor={`links.${index}.url`}>
+                          {tc.url}
                         </EditorFieldLabel>
                         <Input
-                          type='text'
-                          placeholder={tc.name}
-                          {...register(`links.${index}.name`)}
+                          type='url'
+                          placeholder={tc.url}
+                          {...register(`links.${index}.url`)}
                         />
                       </EditorFieldItem>
-                      <EditorFieldItem className='flex-row'>
-                        <EditorFieldItem>
-                          <EditorFieldLabel htmlFor={`links.${index}.url`}>
-                            {tc.url}
-                          </EditorFieldLabel>
-                          <Input
-                            type='url'
-                            placeholder={tc.url}
-                            {...register(`links.${index}.url`)}
-                          />
-                        </EditorFieldItem>
-                        <Button
-                          type='button'
-                          variant='ghost'
-                          size='icon'
-                          onClick={() => handleRemove(index)}
-                          className='mt-6'>
-                          <X size={16} />
-                        </Button>
-                      </EditorFieldItem>
-                    </EditorFieldRow>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
+                      <Button
+                        type='button'
+                        variant='ghost'
+                        size='icon'
+                        onClick={() => handleRemove(index)}
+                        className='mt-6'>
+                        <X size={16} />
+                      </Button>
+                    </EditorFieldItem>
+                  </EditorFieldRow>
+                </div>
+              ))}
             </EditorFormFieldGroup>
             <Button
               type='button'
