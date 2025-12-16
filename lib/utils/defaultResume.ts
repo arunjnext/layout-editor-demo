@@ -1,5 +1,6 @@
-import { newSocialLink } from './dataTransformers'
+import { newSocialLink, SocialLink } from './dataTransformers'
 import { resumeOptionValue } from './resumeConstants'
+import { CustomSectionItem, EducationItem, ExperienceItem, ProficiencyItem, SkillItem } from './types'
 
 export interface ResumeSection {
   id: string
@@ -33,15 +34,15 @@ export interface Resume {
   lastName: string
   email: string
   phone: string
-  summary: any
-  profileImage: any
+  summary: string
+  profileImage: string | null
   showProfileImage: boolean
-  links: any[]
-  experience: any[]
-  skills: any[]
-  education: any[]
-  proficiencies: any[]
-  customSections: any[]
+  links: SocialLink[]
+  experience: ExperienceItem[]
+  skills: SkillItem[]
+  education: EducationItem[]
+  proficiencies: ProficiencyItem[]
+  customSections: CustomSectionItem[]
   design: ResumeDesign
 }
 

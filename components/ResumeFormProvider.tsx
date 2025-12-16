@@ -6,9 +6,9 @@ import { useResumeFormWatch } from "@/hooks/useResumeFormWatch";
 import { getResumeFormDefaults } from "@/lib/utils/dataTransformers";
 import { unifiedResumeSchema } from "@/lib/utils/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { ReactNode } from "react";
 import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
-import type { ReactNode } from "react";
 
 interface ResumeFormProviderProps {
   children: ReactNode;
@@ -58,4 +58,3 @@ export const ResumeFormProvider = ({ children }: ResumeFormProviderProps) => {
 
   return <Form {...form}>{children}</Form>;
 };
-

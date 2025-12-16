@@ -1,11 +1,16 @@
 "use client";
 
+import type { Resume } from "@/lib/utils/defaultResume";
 import { useEffect } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { useResume } from "./useResume";
 
+// Form data type that matches Resume structure (excluding id, name, design)
+// This ensures type compatibility between form and resume
+type ResumeFormData = Omit<Resume, "id" | "name" | "design">;
+
 interface UseResumeFormWatchProps {
-  form: UseFormReturn<any>;
+  form: UseFormReturn<ResumeFormData>;
 }
 
 /**
@@ -21,7 +26,11 @@ export const useResumeFormWatch = ({ form }: UseResumeFormWatchProps) => {
       if (name && type === "change") {
         // Determine which section changed based on field path
         // Form structure matches Resume structure, so we can update directly
-        let update: Partial<any> = {};
+        // Note: data may be partial, so we need to get full form values
+        const formValues = form.getValues();
+        let update: Partial<Resume> = {};
+
+        
 
         if (
           name.startsWith("firstName") ||
@@ -36,40 +45,40 @@ export const useResumeFormWatch = ({ form }: UseResumeFormWatchProps) => {
         ) {
           // Personal Details section - update all personal detail fields
           update = {
-            profileImage: data.profileImage,
-            showProfileImage: data.showProfileImage,
-            firstName: data.firstName,
-            lastName: data.lastName,
-            jobTitle: data.jobTitle,
-            summary: data.summary,
-            phone: data.phone,
-            email: data.email,
-            links: data.links,
+            profileImage: formValues.profileImage,
+            showProfileImage: formValues.showProfileImage,
+            firstName: formValues.firstName,
+            lastName: formValues.lastName,
+            jobTitle: formValues.jobTitle,
+            summary: formValues.summary,
+            phone: formValues.phone,
+            email: formValues.email,
+            links: formValues.links,
           };
         } else if (name.startsWith("experience")) {
           // Experience section
           update = {
-            experience: data.experience,
+            experience: formValues.experience,
           };
         } else if (name.startsWith("skills")) {
           // Skills section
           update = {
-            skills: data.skills,
+            skills: formValues.skills,
           };
         } else if (name.startsWith("education")) {
           // Education section
           update = {
-            education: data.education,
+            education: formValues.education,
           };
         } else if (name.startsWith("proficiencies")) {
           // Proficiencies section
           update = {
-            proficiencies: data.proficiencies,
+            proficiencies: formValues.proficiencies,
           };
         } else if (name.startsWith("customSections")) {
           // Custom Sections
           update = {
-            customSections: data.customSections,
+            customSections: formValues.customSections,
           };
         }
 
@@ -81,6 +90,6 @@ export const useResumeFormWatch = ({ form }: UseResumeFormWatchProps) => {
     });
 
     return () => subscription.unsubscribe();
-  }, [watch, updateResume]);
+  }, [watch, updateResume, form]);
 };
 
