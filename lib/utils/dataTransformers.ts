@@ -57,6 +57,8 @@ export interface ResumeData {
   design?: any
 }
 
+// Deprecated: These transformation functions are no longer needed with unified form
+// Keeping for backward compatibility during migration
 export const resumeValues = {
   personalDetails: (data?: ResumeData) => {
     return {
@@ -92,5 +94,47 @@ export const resumeValues = {
   },
   design: (data?: ResumeData, key?: string) => {
     return key ? { [key]: data } : data?.design
+  }
+}
+
+// New helper: Direct mapping from Resume to form defaults (no transformations)
+// Form data structure matches Resume structure exactly
+import type { Resume } from './defaultResume'
+
+export const getResumeFormDefaults = (resume?: Resume) => {
+  if (!resume) {
+    return {
+      profileImage: null,
+      showProfileImage: true,
+      firstName: '',
+      lastName: '',
+      jobTitle: '',
+      summary: '',
+      phone: '',
+      email: '',
+      links: [newSocialLink],
+      experience: [],
+      skills: [],
+      education: [],
+      proficiencies: [],
+      customSections: [],
+    }
+  }
+
+  return {
+    profileImage: resume.profileImage ?? null,
+    showProfileImage: resume.showProfileImage ?? true,
+    firstName: resume.firstName ?? '',
+    lastName: resume.lastName ?? '',
+    jobTitle: resume.jobTitle ?? '',
+    summary: resume.summary ?? '',
+    phone: resume.phone ?? '',
+    email: resume.email ?? '',
+    links: resume.links ?? [newSocialLink],
+    experience: resume.experience ?? [],
+    skills: resume.skills ?? [],
+    education: resume.education ?? [],
+    proficiencies: resume.proficiencies ?? [],
+    customSections: resume.customSections ?? [],
   }
 }

@@ -123,3 +123,33 @@ export const personalDetailsSchema = z.object({
   email: commonSchema.email,
   links: resumeSectionSchemas.links
 })
+
+// Unified schema that matches Resume interface structure exactly
+// Form data structure directly matches Resume structure (no nested wrappers)
+export const unifiedResumeSchema = z.object({
+  // Personal Details fields (flat structure, not nested)
+  profileImage: commonSchema.profileImage,
+  showProfileImage: commonSchema.showProfileImage,
+  firstName: commonSchema.firstName,
+  lastName: commonSchema.lastName,
+  jobTitle: commonSchema.jobTitle,
+  summary: commonSchema.summary,
+  phone: commonSchema.phone,
+  email: commonSchema.email,
+  links: z.array(resumeItemSchemas.link),
+  
+  // Experience (direct array, not wrapped)
+  experience: z.array(resumeItemSchemas.experience),
+  
+  // Skills (direct array)
+  skills: z.array(resumeItemSchemas.skill),
+  
+  // Education (direct array)
+  education: z.array(resumeItemSchemas.education),
+  
+  // Proficiencies (direct array)
+  proficiencies: z.array(resumeItemSchemas.proficiency),
+  
+  // Custom Sections (direct array)
+  customSections: z.array(resumeItemSchemas.customSection),
+})

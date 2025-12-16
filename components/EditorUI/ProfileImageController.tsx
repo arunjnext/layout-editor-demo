@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useRef, useState } from "react";
 import {
   useController,
-  type Control,
+  useFormContext,
   type FieldValues,
   type Path,
 } from "react-hook-form";
@@ -101,17 +101,16 @@ const ProfileImage = ({
 
 interface ProfileImageControllerProps<T extends FieldValues = FieldValues> {
   name: Path<T>;
-  control: Control<T>;
   profileImageUrl?: string | null;
   onImageChange?: (file: File | null) => void;
 }
 
 export const ProfileImageController = <T extends FieldValues = FieldValues>({
   name,
-  control,
   profileImageUrl,
   onImageChange,
 }: ProfileImageControllerProps<T>) => {
+  const { control } = useFormContext<T>();
   const {
     field: { onChange },
   } = useController({
