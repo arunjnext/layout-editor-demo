@@ -14,6 +14,11 @@ import { ProfileImageController } from "@/components/EditorUI/ProfileImageContro
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/input-group";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { useCustomUndoRedo } from "@/hooks/useCustomUndoRedo";
@@ -24,7 +29,7 @@ import { newSocialLink, resumeValues } from "@/lib/utils/dataTransformers";
 import { resumeOptionValue } from "@/lib/utils/resumeConstants";
 import { personalDetailsSchema } from "@/lib/utils/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus, X } from "lucide-react";
+import { Link, Mail, Phone, Plus, X } from "lucide-react";
 import { useEffect } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 
@@ -98,10 +103,10 @@ export const PersonalDetails = () => {
       <EditorPanelHeader
         editable={false}
         sectionKey={resumeOptionValue.personalDetails}
-        description="yourNameSummaryImageAndTitle"
+        description="Edit your personal details"
       />
       <Form {...form}>
-        <form className="space-y-6 divide-y divide-border [&>*:not(:first-child)]:pt-6">
+        <form className="space-y-6">
           <EditorFormBlock>
             <EditorFormTitle title={defaultTranslations.yourDetails} />
             <EditorFieldRow className="gap-6 items-start">
@@ -201,21 +206,31 @@ export const PersonalDetails = () => {
                   <EditorFieldLabel htmlFor="phone">
                     {defaultTranslations.phone}
                   </EditorFieldLabel>
-                  <Input
-                    type="text"
-                    placeholder={defaultTranslations.phone}
-                    {...register(`phone`)}
-                  />
+                  <InputGroup>
+                    <InputGroupInput
+                      type="text"
+                      placeholder={defaultTranslations.phone}
+                      {...register(`phone`)}
+                    />
+                    <InputGroupAddon>
+                      <Phone />
+                    </InputGroupAddon>
+                  </InputGroup>
                 </EditorFieldItem>
                 <EditorFieldItem className="flex-1">
                   <EditorFieldLabel htmlFor="email">
                     {defaultTranslations.email}
                   </EditorFieldLabel>
-                  <Input
-                    type="text"
-                    placeholder={defaultTranslations.email}
-                    {...register(`email`)}
-                  />
+                  <InputGroup>
+                    <InputGroupInput
+                      type="text"
+                      placeholder={defaultTranslations.email}
+                      {...register(`email`)}
+                    />
+                    <InputGroupAddon>
+                      <Mail />
+                    </InputGroupAddon>
+                  </InputGroup>
                 </EditorFieldItem>
               </EditorFieldRow>
             </EditorFormFieldGroup>
@@ -240,11 +255,16 @@ export const PersonalDetails = () => {
                       <EditorFieldLabel htmlFor={`links.${index}.url`}>
                         {defaultTranslations.url}
                       </EditorFieldLabel>
-                      <Input
-                        type="url"
-                        placeholder={defaultTranslations.url}
-                        {...register(`links.${index}.url`)}
-                      />
+                      <InputGroup>
+                        <InputGroupInput
+                          type="url"
+                          placeholder={defaultTranslations.url}
+                          {...register(`links.${index}.url`)}
+                        />
+                        <InputGroupAddon>
+                          <Link />
+                        </InputGroupAddon>
+                      </InputGroup>
                     </EditorFieldItem>
                     <Button
                       type="button"

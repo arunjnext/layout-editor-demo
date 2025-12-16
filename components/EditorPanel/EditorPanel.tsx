@@ -1,5 +1,6 @@
 "use client";
 
+import { ItemGroup } from "@/components/ui/item";
 import { useEditor } from "@/hooks/useEditor";
 import { useResume } from "@/hooks/useResume";
 import { getResumeTitle } from "@/lib/utils/helpers";
@@ -10,7 +11,6 @@ import { EditorPanelContainer } from "./EditorPanelContainer";
 import { EditorPanelItem } from "./EditorPanelItem";
 import { EditorSheet } from "./EditorSheet";
 import { EditorTopbar, ResumeTitle } from "./EditorTopbar";
-import { ItemGroup } from "@/components/ui/item";
 
 const defaultTranslations = {
   newResume: "New Resume",
@@ -34,7 +34,8 @@ export const EditorPanel = () => {
   const { activePanelId, isSheetActive } = useEditor();
   const { resume } = useResume();
   const { name, jobTitle } = resume;
-  const resumeName = getResumeTitle({ name, jobTitle }) || defaultTranslations.newResume;
+  const resumeName =
+    getResumeTitle({ name, jobTitle }) || defaultTranslations.newResume;
 
   const sectionOrder = resume.design.sections || [];
 
@@ -66,12 +67,7 @@ export const EditorPanel = () => {
         >
           <ItemGroup className="relative w-full gap-0">
             {orderedSections.map((section) => {
-              return (
-                <EditorPanelItem
-                  key={section.id}
-                  section={section}
-                />
-              );
+              return <EditorPanelItem key={section.id} section={section} />;
             })}
           </ItemGroup>
         </EditorPanelContainer>

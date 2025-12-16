@@ -6,7 +6,7 @@ import { useEditor } from "@/hooks/useEditor";
 import type { ResumeSection } from "@/lib/utils/defaultResume";
 import { cn } from "@/lib/utils/helpers";
 import type { EditorSection } from "@/lib/utils/resumeConstants";
-import { ChevronRight, Eye, EyeOff, GripVertical } from "lucide-react";
+import { ChevronRight, Eye, EyeOff } from "lucide-react";
 import type { ReactNode } from "react";
 
 const defaultTranslations: Record<string, string> = {
@@ -81,7 +81,9 @@ export const EditorSectionDetails = ({
           weight="medium"
           className="text-foreground max-w-52 w-full truncate sm:max-w-80"
         >
-          {title === sectionName ? defaultTranslations[title] || sectionName : sectionName}
+          {title === sectionName
+            ? defaultTranslations[title] || sectionName
+            : sectionName}
         </Text>
         <Text
           as="span"
@@ -93,29 +95,6 @@ export const EditorSectionDetails = ({
         </Text>
       </div>
     </Button>
-  );
-};
-
-interface EditorSectionReorderProps {
-  dragControls?: unknown;
-  isVisible: boolean;
-  className?: string;
-}
-
-export const EditorSectionReorder = ({
-  isVisible,
-  className,
-}: EditorSectionReorderProps) => {
-  return (
-    <div
-      className={cn(
-        "flex items-center gap-2",
-        isVisible ? "cursor-grab" : "cursor-not-allowed opacity-35",
-        className
-      )}
-    >
-      <GripVertical size={20} className="text-muted-foreground" />
-    </div>
   );
 };
 
@@ -175,8 +154,8 @@ export const EditorSectionVisibility = ({
       size="sm"
       className="text-muted-foreground"
       onClick={(e) => {
-        e.stopPropagation()
-        updateSectionsVisibility(resumeSection, 0)
+        e.stopPropagation();
+        updateSectionsVisibility(resumeSection, 0);
       }}
     >
       {isVisible ? <Eye /> : <EyeOff />}

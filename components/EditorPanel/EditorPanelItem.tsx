@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  EditorSectionReorder,
-  EditorSectionVisibility,
-} from "@/components/EditorUI/EditorSectionPanel";
+import { EditorSectionVisibility } from "@/components/EditorUI/EditorSectionPanel";
 import { Button } from "@/components/ui/button";
 import {
   Item,
@@ -44,9 +41,7 @@ interface EditorPanelItemProps {
   };
 }
 
-export const EditorPanelItem = ({
-  section,
-}: EditorPanelItemProps) => {
+export const EditorPanelItem = ({ section }: EditorPanelItemProps) => {
   const { handlePanelClick, sectionsVisibility, visiblityControls } =
     useEditor();
   const { id, sectionKey } = section;
@@ -57,7 +52,9 @@ export const EditorPanelItem = ({
   const { title, description, icon: Icon, sectionKey: sectionName } = section;
 
   const displayTitle =
-    title === sectionName ? defaultTranslations[title] || sectionName : sectionName;
+    title === sectionName
+      ? defaultTranslations[title] || sectionName
+      : sectionName;
   const displayDescription = defaultTranslations[description] || description;
 
   return (
@@ -66,17 +63,12 @@ export const EditorPanelItem = ({
         variant="outline"
         size="default"
         className={cn(
-          "border-b border-border rounded-none border-x-0 border-t-0 bg-background px-4 lg:px-6 py-2",
+          "border-b border-border rounded-none border-x-0 border-t-0 bg-background p-4",
           !isVisible && "opacity-35",
           isVisible && "hover:bg-background-alt cursor-pointer"
         )}
         onClick={() => isVisible && handlePanelClick(sectionKey)}
       >
-        <EditorSectionReorder
-          dragControls={undefined}
-          isVisible={isVisible}
-          className={cn(isPersonalDetails && "invisible")}
-        />
         <ItemMedia
           variant="icon"
           className="bg-accent rounded-[10px] p-1.5 h-full flex items-center justify-center"

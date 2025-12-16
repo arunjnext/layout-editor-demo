@@ -19,7 +19,7 @@ export default function Page() {
           </div>
 
           {/* Right column: Editor Panel */}
-          <div className="flex-1 h-full overflow-hidden bg-background">
+          <div className="flex-1 h-full max-w-xl overflow-hidden bg-background">
             <EditorPanel />
           </div>
         </div>
