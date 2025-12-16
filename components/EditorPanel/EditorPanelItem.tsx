@@ -42,12 +42,10 @@ interface EditorPanelItemProps {
     sectionKey: string;
     isVisible: boolean;
   };
-  translations?: Record<string, string>;
 }
 
 export const EditorPanelItem = ({
   section,
-  translations = {},
 }: EditorPanelItemProps) => {
   const { handlePanelClick, sectionsVisibility, visiblityControls } =
     useEditor();
@@ -57,11 +55,10 @@ export const EditorPanelItem = ({
   const isPersonalDetails = sectionKey === resumeOptionValue.personalDetails;
 
   const { title, description, icon: Icon, sectionKey: sectionName } = section;
-  const tc = { ...defaultTranslations, ...translations };
 
   const displayTitle =
-    title === sectionName ? tc[title] || sectionName : sectionName;
-  const displayDescription = tc[description] || description;
+    title === sectionName ? defaultTranslations[title] || sectionName : sectionName;
+  const displayDescription = defaultTranslations[description] || description;
 
   return (
     <div id={id} className="relative">

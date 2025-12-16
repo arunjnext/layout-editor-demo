@@ -28,22 +28,18 @@ interface EditorPanelHeaderProps {
   sectionKey: string;
   description?: string;
   editable?: boolean;
-  translations?: Record<string, string>;
 }
 
 export const EditorPanelHeader = ({
   sectionKey,
   description,
   editable = true,
-  translations = {},
 }: EditorPanelHeaderProps) => {
-  const tc = { ...defaultTranslations, ...translations };
-
   return (
     <div className="border-b border-border pb-4 mb-6">
       <div className="flex items-center gap-1">
         {editable ? (
-          <TitleEditable sectionKey={sectionKey} translations={tc} />
+          <TitleEditable sectionKey={sectionKey} />
         ) : (
           <Text
             as="span"
@@ -51,7 +47,7 @@ export const EditorPanelHeader = ({
             weight="semibold"
             className="block text-foreground whitespace-nowrap text-ellipsis overflow-hidden"
           >
-            {tc[sectionKey] || sectionKey}
+            {defaultTranslations[sectionKey] || sectionKey}
           </Text>
         )}
       </div>
@@ -61,7 +57,7 @@ export const EditorPanelHeader = ({
           variant="sm"
           className="block leading-5 text-muted-foreground mt-1"
         >
-          {tc[description] || description}
+          {defaultTranslations[description] || description}
         </Text>
       )}
     </div>
@@ -70,10 +66,9 @@ export const EditorPanelHeader = ({
 
 interface TitleEditableProps {
   sectionKey: string;
-  translations: typeof defaultTranslations;
 }
 
-const TitleEditable = ({ sectionKey, translations }: TitleEditableProps) => {
+const TitleEditable = ({ sectionKey }: TitleEditableProps) => {
   const [isEditSectionTitle, setIsEditSectionTitle] = useState(false);
   const { resume, updateResume } = useResume();
   const { design } = resume;
@@ -85,7 +80,7 @@ const TitleEditable = ({ sectionKey, translations }: TitleEditableProps) => {
 
   const value =
     sectionKey === initialName
-      ? translations[sectionKey] || sectionKey
+      ? defaultTranslations[sectionKey] || sectionKey
       : initialName;
 
   const form = useForm<{ sectionName: string }>({
@@ -99,7 +94,7 @@ const TitleEditable = ({ sectionKey, translations }: TitleEditableProps) => {
   const onSubmit = useCallback(
     (data: { sectionName: string }) => {
       if (
-        data.sectionName === translations[sectionKey] &&
+        data.sectionName === defaultTranslations[sectionKey] &&
         data.sectionName === value
       ) {
         reset({ sectionName: value });
@@ -128,7 +123,6 @@ const TitleEditable = ({ sectionKey, translations }: TitleEditableProps) => {
       updateResume,
       reset,
       value,
-      translations,
     ]
   );
 

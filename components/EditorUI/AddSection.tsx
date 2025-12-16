@@ -84,15 +84,9 @@ export const ReorderItem = ({ id, className, children }: ReorderItemProps) => {
 interface AddSectionProps {
   text: string;
   onClick: () => void;
-  translations?: Record<string, string>;
 }
 
-export const AddSection = ({
-  text,
-  onClick,
-  translations = {},
-}: AddSectionProps) => {
-  const tc = { ...defaultTranslations, ...translations };
+export const AddSection = ({ text, onClick }: AddSectionProps) => {
   const { visiblityControls } = useEditor();
 
   if (visiblityControls) {
@@ -108,7 +102,7 @@ export const AddSection = ({
       className="w-full justify-start p-4 border border-dashed border-slate-300 rounded-lg transition-colors hover:text-slate-700 hover:border-slate-400 mb-5"
     >
       <Plus />
-      {tc[text] || text}
+      {defaultTranslations[text] || text}
     </Button>
   );
 };

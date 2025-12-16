@@ -30,16 +30,11 @@ const defaultTranslations = {
   showcaseUniqueExperiences: "Showcase unique experiences",
 };
 
-interface EditorPanelProps {
-  translations?: Record<string, string>;
-}
-
-export const EditorPanel = ({ translations = {} }: EditorPanelProps) => {
+export const EditorPanel = () => {
   const { activePanelId, isSheetActive } = useEditor();
   const { resume } = useResume();
   const { name, jobTitle } = resume;
-  const tc = { ...defaultTranslations, ...translations };
-  const resumeName = getResumeTitle({ name, jobTitle }) || tc.newResume;
+  const resumeName = getResumeTitle({ name, jobTitle }) || defaultTranslations.newResume;
 
   const sectionOrder = resume.design.sections || [];
 
@@ -61,7 +56,7 @@ export const EditorPanel = ({ translations = {} }: EditorPanelProps) => {
 
   return (
     <div className="h-full flex flex-col overflow-hidden">
-      <EditorNavigation translations={tc} />
+      <EditorNavigation />
       <div className="relative flex-auto overflow-y-auto overflow-hidden thin-scrollbar">
         <EditorTopbar>
           {resumeName && <ResumeTitle title={resumeName} />}
@@ -75,7 +70,6 @@ export const EditorPanel = ({ translations = {} }: EditorPanelProps) => {
                 <EditorPanelItem
                   key={section.id}
                   section={section}
-                  translations={tc}
                 />
               );
             })}
@@ -85,7 +79,7 @@ export const EditorPanel = ({ translations = {} }: EditorPanelProps) => {
           isSheetActive={isSheetActive}
           activePanelId={activePanelId}
         >
-          <EditorContent activePanelId={activePanelId} translations={tc} />
+          <EditorContent activePanelId={activePanelId} />
         </EditorSheet>
       </div>
     </div>

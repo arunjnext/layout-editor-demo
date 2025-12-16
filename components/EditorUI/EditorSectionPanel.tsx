@@ -51,17 +51,14 @@ interface EditorSectionDetailsProps {
   onClick: () => void;
   section: EditorSection & { sectionKey: string; sectionName?: string };
   isVisible: boolean;
-  translations?: Record<string, string>;
 }
 
 export const EditorSectionDetails = ({
   onClick,
   section,
   isVisible,
-  translations = {},
 }: EditorSectionDetailsProps) => {
   const { title, description, icon: Icon, sectionName } = section;
-  const tc = { ...defaultTranslations, ...translations };
 
   return (
     <Button
@@ -84,7 +81,7 @@ export const EditorSectionDetails = ({
           weight="medium"
           className="text-foreground max-w-52 w-full truncate sm:max-w-80"
         >
-          {title === sectionName ? tc[title] || sectionName : sectionName}
+          {title === sectionName ? defaultTranslations[title] || sectionName : sectionName}
         </Text>
         <Text
           as="span"
@@ -92,7 +89,7 @@ export const EditorSectionDetails = ({
           weight="normal"
           className="text-muted-foreground max-w-52 w-full truncate sm:max-w-80"
         >
-          {tc[description] || description}
+          {defaultTranslations[description] || description}
         </Text>
       </div>
     </Button>

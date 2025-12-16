@@ -14,21 +14,8 @@ const defaultTranslations = {
   visibility: 'Visibility'
 }
 
-interface Translations {
-  resumeSections?: string
-  back?: string
-  save?: string
-  visibility?: string
-  [key: string]: string | undefined
-}
-
-interface EditorNavigationProps {
-  translations?: Translations
-}
-
-export const EditorNavigation = ({ translations = {} }: EditorNavigationProps) => {
+export const EditorNavigation = () => {
   const { isSheetActive, visiblityControls, activeTab } = useEditor()
-  const tc = { ...defaultTranslations, ...translations }
 
   return (
     <div className='px-4 lg:px-6 py-4 bg-custom-gradient border-b border-border flex items-center justify-between'>
@@ -36,13 +23,13 @@ export const EditorNavigation = ({ translations = {} }: EditorNavigationProps) =
         <>
           {isSheetActive ? (
             <>
-              <BackButton translations={tc} />
+              <BackButton />
               <Text
                 as='span'
                 variant='xs'
                 weight='medium'
                 className='text-muted-foreground lg:hidden'>
-                {tc.resumeSections}
+                {defaultTranslations.resumeSections}
               </Text>
             </>
           ) : (
@@ -51,14 +38,14 @@ export const EditorNavigation = ({ translations = {} }: EditorNavigationProps) =
               variant='xs'
               weight='medium'
               className='text-muted-foreground'>
-              {tc.resumeSections}
+              {defaultTranslations.resumeSections}
             </Text>
           )}
           <div className='flex items-center gap-2.5'>
             {visiblityControls ? (
-              <SaveButton translations={tc} />
+              <SaveButton />
             ) : (
-              <VisibilityButton translations={tc} />
+              <VisibilityButton />
             )}
           </div>
         </>
@@ -67,11 +54,7 @@ export const EditorNavigation = ({ translations = {} }: EditorNavigationProps) =
   )
 }
 
-interface ButtonProps {
-  translations: typeof defaultTranslations
-}
-
-const BackButton = ({ translations }: ButtonProps) => {
+const BackButton = () => {
   const { handleBack } = useEditor()
   return (
     <Button
@@ -80,12 +63,12 @@ const BackButton = ({ translations }: ButtonProps) => {
       className='text-xs gap-1.5 flex'
       onClick={handleBack}>
       <ChevronLeft size={16} />
-      {translations.back}
+      {defaultTranslations.back}
     </Button>
   )
 }
 
-const SaveButton = ({ translations }: ButtonProps) => {
+const SaveButton = () => {
   const { saveItemsVisibility } = useEditor()
   const { isUpdatingResume } = useResume()
   return (
@@ -96,12 +79,12 @@ const SaveButton = ({ translations }: ButtonProps) => {
       disabled={isUpdatingResume}
       className='text-sm gap-1 group transition-colors text-muted-foreground'>
       <Check className='text-muted-foreground group-hover:text-muted-foreground size-4' />
-      {translations.save}
+      {defaultTranslations.save}
     </Button>
   )
 }
 
-const VisibilityButton = ({ translations }: ButtonProps) => {
+const VisibilityButton = () => {
   const { isUpdatingResume } = useResume()
   const { showVisibilityControls, activePanelId, isSheetActive } = useEditor()
 
@@ -120,7 +103,7 @@ const VisibilityButton = ({ translations }: ButtonProps) => {
       disabled={isUpdatingResume}
       className='text-sm gap-1 group transition-colors text-muted-foreground'>
       <Eye className='text-muted-foreground group-hover:text-muted-foreground size-4' />
-      {translations.visibility}
+      {defaultTranslations.visibility}
     </Button>
   )
 }

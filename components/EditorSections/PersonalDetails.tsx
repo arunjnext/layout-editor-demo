@@ -45,14 +45,7 @@ const defaultTranslations = {
   addLink: "Add Link",
 };
 
-interface PersonalDetailsProps {
-  translations?: Record<string, string>;
-}
-
-export const PersonalDetails = ({
-  translations = {},
-}: PersonalDetailsProps) => {
-  const tc = { ...defaultTranslations, ...translations };
+export const PersonalDetails = () => {
   const { resume } = useResume();
 
   const defaultValues = resumeValues.personalDetails(resume);
@@ -106,17 +99,16 @@ export const PersonalDetails = ({
         editable={false}
         sectionKey={resumeOptionValue.personalDetails}
         description="yourNameSummaryImageAndTitle"
-        translations={tc}
       />
       <Form {...form}>
         <form className="space-y-6 divide-y divide-border [&>*:not(:first-child)]:pt-6">
           <EditorFormBlock>
-            <EditorFormTitle title={tc.yourDetails} />
+            <EditorFormTitle title={defaultTranslations.yourDetails} />
             <EditorFieldRow className="gap-6 items-start">
               <div className="flex shrink-0 flex-col gap-3">
                 <EditorFieldItem className="gap-0!">
                   <EditorFieldLabel className="sr-only" htmlFor="profileImage">
-                    {tc.addAProfileImage}
+                    {defaultTranslations.addAProfileImage}
                   </EditorFieldLabel>
                   <ProfileImageController
                     name="profileImage"
@@ -140,7 +132,7 @@ export const PersonalDetails = ({
                       )}
                     />
                     <EditorFieldLabel htmlFor="showProfileImage">
-                      {tc.show}
+                      {defaultTranslations.show}
                     </EditorFieldLabel>
                   </EditorFieldCheckbox>
                 </EditorFieldItem>
@@ -149,21 +141,21 @@ export const PersonalDetails = ({
                 <EditorFieldRow className="flex-row">
                   <EditorFieldItem className="flex-1">
                     <EditorFieldLabel htmlFor="firstName">
-                      {tc.firstName}
+                      {defaultTranslations.firstName}
                     </EditorFieldLabel>
                     <Input
                       type="text"
-                      placeholder={tc.firstName}
+                      placeholder={defaultTranslations.firstName}
                       {...register(`firstName`)}
                     />
                   </EditorFieldItem>
                   <EditorFieldItem className="flex-1">
                     <EditorFieldLabel htmlFor="lastName">
-                      {tc.lastName}
+                      {defaultTranslations.lastName}
                     </EditorFieldLabel>
                     <Input
                       type="text"
-                      placeholder={tc.lastName}
+                      placeholder={defaultTranslations.lastName}
                       {...register(`lastName`)}
                     />
                   </EditorFieldItem>
@@ -171,11 +163,11 @@ export const PersonalDetails = ({
                 <EditorFieldRow>
                   <EditorFieldItem>
                     <EditorFieldLabel htmlFor="jobTitle">
-                      {tc.desiredJobTitle}
+                      {defaultTranslations.desiredJobTitle}
                     </EditorFieldLabel>
                     <Input
                       type="text"
-                      placeholder={tc.desiredJobTitle}
+                      placeholder={defaultTranslations.desiredJobTitle}
                       {...register(`jobTitle`)}
                     />
                   </EditorFieldItem>
@@ -184,16 +176,16 @@ export const PersonalDetails = ({
             </EditorFieldRow>
           </EditorFormBlock>
           <EditorFormBlock>
-            <EditorFormTitle title={tc.summary} />
+            <EditorFormTitle title={defaultTranslations.summary} />
             <EditorFormFieldGroup>
               <EditorFieldRow>
                 <EditorFieldItem>
                   <EditorFieldLabel className="sr-only" htmlFor="summary">
-                    {tc.summary}
+                    {defaultTranslations.summary}
                   </EditorFieldLabel>
                   <Textarea
                     id="summary"
-                    placeholder={tc.summary}
+                    placeholder={defaultTranslations.summary}
                     {...register("summary")}
                     rows={6}
                   />
@@ -202,26 +194,26 @@ export const PersonalDetails = ({
             </EditorFormFieldGroup>
           </EditorFormBlock>
           <EditorFormBlock>
-            <EditorFormTitle title={tc.contactDetails} />
+            <EditorFormTitle title={defaultTranslations.contactDetails} />
             <EditorFormFieldGroup>
               <EditorFieldRow className="flex-row">
                 <EditorFieldItem className="flex-1">
                   <EditorFieldLabel htmlFor="phone">
-                    {tc.phone}
+                    {defaultTranslations.phone}
                   </EditorFieldLabel>
                   <Input
                     type="text"
-                    placeholder={tc.phone}
+                    placeholder={defaultTranslations.phone}
                     {...register(`phone`)}
                   />
                 </EditorFieldItem>
                 <EditorFieldItem className="flex-1">
                   <EditorFieldLabel htmlFor="email">
-                    {tc.email}
+                    {defaultTranslations.email}
                   </EditorFieldLabel>
                   <Input
                     type="text"
-                    placeholder={tc.email}
+                    placeholder={defaultTranslations.email}
                     {...register(`email`)}
                   />
                 </EditorFieldItem>
@@ -229,28 +221,28 @@ export const PersonalDetails = ({
             </EditorFormFieldGroup>
           </EditorFormBlock>
           <EditorFormBlock>
-            <EditorFormTitle title={tc.links} />
+            <EditorFormTitle title={defaultTranslations.links} />
             <EditorFormFieldGroup>
               {fields.map((field, index) => (
                 <div key={field.id}>
                   <EditorFieldRow className="flex-row items-end gap-2">
                     <EditorFieldItem className="flex-1">
                       <EditorFieldLabel htmlFor={`links.${index}.name`}>
-                        {tc.name}
+                        {defaultTranslations.name}
                       </EditorFieldLabel>
                       <Input
                         type="text"
-                        placeholder={tc.name}
+                        placeholder={defaultTranslations.name}
                         {...register(`links.${index}.name`)}
                       />
                     </EditorFieldItem>
                     <EditorFieldItem className="flex-1">
                       <EditorFieldLabel htmlFor={`links.${index}.url`}>
-                        {tc.url}
+                        {defaultTranslations.url}
                       </EditorFieldLabel>
                       <Input
                         type="url"
-                        placeholder={tc.url}
+                        placeholder={defaultTranslations.url}
                         {...register(`links.${index}.url`)}
                       />
                     </EditorFieldItem>
@@ -274,7 +266,7 @@ export const PersonalDetails = ({
               onClick={() => append(newSocialLink)}
               className="mt-3"
             >
-              {tc.addLink}
+              {defaultTranslations.addLink}
               <Plus size={16} />
             </Button>
           </EditorFormBlock>

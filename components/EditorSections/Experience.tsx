@@ -1,22 +1,16 @@
-import { resumeOptionValue } from '@/lib/utils/resumeConstants'
-import { EditorPanelHeader } from '@/components/EditorUI/EditorPanelHeader'
+import { EditorPanelHeader } from "@/components/EditorUI/EditorPanelHeader";
+import { resumeOptionValue } from "@/lib/utils/resumeConstants";
 
-interface ExperienceProps {
-  translations?: Record<string, string>
-}
-
-export const Experience = ({ translations = {} }: ExperienceProps) => {
+export const Experience = () => {
   return (
     <>
       <EditorPanelHeader
         sectionKey={resumeOptionValue.experience}
-        description='yourWorkHistoryAndAchievements'
-        translations={translations}
+        description="yourWorkHistoryAndAchievements"
       />
-      <div className='p-4 text-muted-foreground'>
+      <div className="p-4 text-muted-foreground">
         Experience section - To be implemented
       </div>
     </>
-  )
-}
-
+  );
+};

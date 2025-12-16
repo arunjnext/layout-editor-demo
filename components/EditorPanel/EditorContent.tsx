@@ -12,21 +12,12 @@ import { useEditor } from "@/hooks/useEditor";
 import { resumeOptionValue } from "@/lib/utils/resumeConstants";
 import { useEffect } from "react";
 
-interface Translations {
-  [key: string]: string;
-}
-
 interface EditorContentProps {
   activePanelId: string | null;
-  translations?: Translations;
 }
 
-export const EditorContent = ({
-  activePanelId,
-  translations = {},
-}: EditorContentProps) => {
+export const EditorContent = ({ activePanelId }: EditorContentProps) => {
   const { handleBack } = useEditor();
-  const commonTranslations = translations;
 
   // Log warning for invalid activePanelId
   useEffect(() => {
@@ -67,22 +58,22 @@ export const EditorContent = ({
 
   switch (activePanelId) {
     case resumeOptionValue.personalDetails: {
-      return <PersonalDetails translations={commonTranslations} />;
+      return <PersonalDetails />;
     }
     case resumeOptionValue.experience: {
-      return <Experience translations={commonTranslations} />;
+      return <Experience />;
     }
     case resumeOptionValue.skills: {
-      return <Skills translations={commonTranslations} />;
+      return <Skills />;
     }
     case resumeOptionValue.education: {
-      return <Education translations={commonTranslations} />;
+      return <Education />;
     }
     case resumeOptionValue.proficiencies: {
-      return <Proficiencies translations={commonTranslations} />;
+      return <Proficiencies />;
     }
     case resumeOptionValue.customSections: {
-      return <CustomSection translations={commonTranslations} />;
+      return <CustomSection />;
     }
     default: {
       // Fallback UI for invalid activePanelId
