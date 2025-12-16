@@ -1,133 +1,137 @@
-'use client'
+"use client";
 
-import { useEffect, useRef } from 'react'
-import { Plus, X } from 'lucide-react'
-import { Controller, useFieldArray, useForm } from 'react-hook-form'
-import { Button } from '@/components/ui/button'
-import { Form } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { Switch } from '@/components/ui/switch'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useCustomUndoRedo } from '@/hooks/useCustomUndoRedo'
-import { useFieldRemove } from '@/hooks/useFieldRemove'
-import { useFormWatch } from '@/hooks/useFormWatch'
-import { useResume } from '@/hooks/useResume'
-import {
-  newSocialLink,
-  resumeValues
-} from '@/lib/utils/dataTransformers'
-import { resumeOptionValue } from '@/lib/utils/resumeConstants'
-import { personalDetailsSchema } from '@/lib/utils/schemas'
 import {
   EditorFieldCheckbox,
   EditorFieldItem,
   EditorFieldLabel,
-  EditorFieldRow
-} from '@/components/EditorUI/EditorField'
-import { EditorFormBlock } from '@/components/EditorUI/EditorFormBlock'
-import { EditorFormFieldGroup } from '@/components/EditorUI/EditorFormFieldGroup'
-import { EditorFormTitle } from '@/components/EditorUI/EditorFormTitle'
-import { EditorPanelHeader } from '@/components/EditorUI/EditorPanelHeader'
-import { ProfileImageController } from '@/components/EditorUI/ProfileImageController'
-import { RichTextField } from '@/components/RichTextField/RichTextField'
+  EditorFieldRow,
+} from "@/components/EditorUI/EditorField";
+import { EditorFormBlock } from "@/components/EditorUI/EditorFormBlock";
+import { EditorFormFieldGroup } from "@/components/EditorUI/EditorFormFieldGroup";
+import { EditorFormTitle } from "@/components/EditorUI/EditorFormTitle";
+import { EditorPanelHeader } from "@/components/EditorUI/EditorPanelHeader";
+import { ProfileImageController } from "@/components/EditorUI/ProfileImageController";
+import { RichTextField } from "@/components/RichTextField/RichTextField";
+import { Button } from "@/components/ui/button";
+import { Form } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
+import { useCustomUndoRedo } from "@/hooks/useCustomUndoRedo";
+import { useFieldRemove } from "@/hooks/useFieldRemove";
+import { useFormWatch } from "@/hooks/useFormWatch";
+import { useResume } from "@/hooks/useResume";
+import { newSocialLink, resumeValues } from "@/lib/utils/dataTransformers";
+import { resumeOptionValue } from "@/lib/utils/resumeConstants";
+import { personalDetailsSchema } from "@/lib/utils/schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Plus, X } from "lucide-react";
+import { useEffect } from "react";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 
 const defaultTranslations = {
-  yourDetails: 'Your Details',
-  addAProfileImage: 'Add a Profile Image',
-  show: 'Show',
-  firstName: 'First Name',
-  lastName: 'Last Name',
-  desiredJobTitle: 'Desired Job Title',
-  summary: 'Summary',
-  contactDetails: 'Contact Details',
-  phone: 'Phone',
-  email: 'Email',
-  links: 'Links',
-  name: 'Name',
-  url: 'URL',
-  addLink: 'Add Link'
-}
+  yourDetails: "Your Details",
+  addAProfileImage: "Add a Profile Image",
+  show: "Show",
+  firstName: "First Name",
+  lastName: "Last Name",
+  desiredJobTitle: "Desired Job Title",
+  summary: "Summary",
+  contactDetails: "Contact Details",
+  phone: "Phone",
+  email: "Email",
+  links: "Links",
+  name: "Name",
+  url: "URL",
+  addLink: "Add Link",
+};
 
 interface PersonalDetailsProps {
-  translations?: Record<string, string>
+  translations?: Record<string, string>;
 }
 
-export const PersonalDetails = ({ translations = {} }: PersonalDetailsProps) => {
-  const tc = { ...defaultTranslations, ...translations }
-  const { resume } = useResume()
+export const PersonalDetails = ({
+  translations = {},
+}: PersonalDetailsProps) => {
+  const tc = { ...defaultTranslations, ...translations };
+  const { resume } = useResume();
 
-  const defaultValues = resumeValues.personalDetails(resume)
+  const defaultValues = resumeValues.personalDetails(resume);
 
   const form = useForm({
     resolver: zodResolver(personalDetailsSchema),
-    defaultValues: defaultValues
-  })
+    defaultValues: defaultValues,
+  });
 
-  const { _source } = (resume as any) || {}
+  const { _source } = (resume as unknown as { _source: string }) || {};
 
-  const { register, watch, control, setValue } = form
-  const data = resume?.links || []
+  const { register, watch, control, setValue } = form;
+  const data = resume?.links || [];
 
   const { fields, append, remove } = useFieldArray({
     control: control,
-    name: 'links'
-  })
+    name: "links",
+  });
 
-  useFormWatch({ watch, key: resumeOptionValue.personalDetails })
+  useFormWatch({ watch, key: resumeOptionValue.personalDetails });
 
   const handleRemove = useFieldRemove({
     remove,
-    sectionKey: 'links',
-    data
-  })
+    sectionKey: "links",
+    data,
+  });
 
   useEffect(() => {
-    if (_source === 'undoRedo' && resume) {
-      setValue('showProfileImage', resume.showProfileImage)
-      setValue('profileImage', resume.profileImage)
-      setValue('firstName', resume.firstName)
-      setValue('lastName', resume.lastName)
-      setValue('jobTitle', resume.jobTitle)
-      setValue('summary', resume.summary)
-      setValue('phone', resume.phone)
-      setValue('email', resume.email)
+    if (_source === "undoRedo" && resume) {
+      setValue("showProfileImage", resume.showProfileImage);
+      setValue("profileImage", resume.profileImage);
+      setValue("firstName", resume.firstName);
+      setValue("lastName", resume.lastName);
+      setValue("jobTitle", resume.jobTitle);
+      setValue("summary", resume.summary);
+      setValue("phone", resume.phone);
+      setValue("email", resume.email);
     }
-  }, [_source, resume, setValue])
+  }, [_source, resume, setValue]);
 
-  useCustomUndoRedo(_source, fields, 'links', setValue as (name: string, value: any, options?: any) => void)
+  useCustomUndoRedo(
+    _source,
+    fields,
+    "links",
+    setValue as (name: string, value: unknown, options?: unknown) => void
+  );
 
   return (
     <>
       <EditorPanelHeader
         editable={false}
         sectionKey={resumeOptionValue.personalDetails}
-        description='yourNameSummaryImageAndTitle'
+        description="yourNameSummaryImageAndTitle"
         translations={tc}
       />
       <Form {...form}>
-        <form className='space-y-6 divide-y divide-border [&>*:not(:first-child)]:pt-6'>
+        <form className="space-y-6 divide-y divide-border [&>*:not(:first-child)]:pt-6">
           <EditorFormBlock>
             <EditorFormTitle title={tc.yourDetails} />
-            <EditorFieldRow className='gap-6'>
-              <div className='flex shrink-0 flex-col gap-2'>
+            <EditorFieldRow className="gap-6">
+              <div className="flex shrink-0 flex-col gap-2">
                 <EditorFieldItem>
-                  <EditorFieldLabel className='sr-only' htmlFor='profileImage'>
+                  <EditorFieldLabel className="sr-only" htmlFor="profileImage">
                     {tc.addAProfileImage}
                   </EditorFieldLabel>
                   <ProfileImageController
-                    name='profileImage'
+                    name="profileImage"
                     control={form.control}
-                    profileImageUrl={(resume?.profileImage as any)?.url}
+                    profileImageUrl={resume?.profileImage?.url}
                   />
                 </EditorFieldItem>
                 <EditorFieldItem>
                   <EditorFieldCheckbox>
                     <Controller
-                      name='showProfileImage'
+                      name="showProfileImage"
                       control={form.control}
                       render={({ field }) => (
                         <Switch
-                          id='showProfileImage'
+                          id="showProfileImage"
                           checked={defaultValues.showProfileImage}
                           onCheckedChange={field.onChange}
                           name={field.name}
@@ -135,28 +139,30 @@ export const PersonalDetails = ({ translations = {} }: PersonalDetailsProps) => 
                         />
                       )}
                     />
-                    <EditorFieldLabel htmlFor='showProfileImage'>
+                    <EditorFieldLabel htmlFor="showProfileImage">
                       {tc.show}
                     </EditorFieldLabel>
                   </EditorFieldCheckbox>
                 </EditorFieldItem>
               </div>
               <EditorFormFieldGroup>
-                <EditorFieldRow className='flex-row'>
+                <EditorFieldRow className="flex-row">
                   <EditorFieldItem>
-                    <EditorFieldLabel htmlFor='firstName'>
+                    <EditorFieldLabel htmlFor="firstName">
                       {tc.firstName}
                     </EditorFieldLabel>
                     <Input
-                      type='text'
+                      type="text"
                       placeholder={tc.firstName}
                       {...register(`firstName`)}
                     />
                   </EditorFieldItem>
                   <EditorFieldItem>
-                    <EditorFieldLabel htmlFor='lastName'>{tc.lastName}</EditorFieldLabel>
+                    <EditorFieldLabel htmlFor="lastName">
+                      {tc.lastName}
+                    </EditorFieldLabel>
                     <Input
-                      type='text'
+                      type="text"
                       placeholder={tc.lastName}
                       {...register(`lastName`)}
                     />
@@ -164,11 +170,11 @@ export const PersonalDetails = ({ translations = {} }: PersonalDetailsProps) => 
                 </EditorFieldRow>
                 <EditorFieldRow>
                   <EditorFieldItem>
-                    <EditorFieldLabel htmlFor='jobTitle'>
+                    <EditorFieldLabel htmlFor="jobTitle">
                       {tc.desiredJobTitle}
                     </EditorFieldLabel>
                     <Input
-                      type='text'
+                      type="text"
                       placeholder={tc.desiredJobTitle}
                       {...register(`jobTitle`)}
                     />
@@ -182,20 +188,20 @@ export const PersonalDetails = ({ translations = {} }: PersonalDetailsProps) => 
             <EditorFormFieldGroup>
               <EditorFieldRow>
                 <EditorFieldItem>
-                  <EditorFieldLabel className='sr-only' htmlFor='summary'>
+                  <EditorFieldLabel className="sr-only" htmlFor="summary">
                     {tc.summary}
                   </EditorFieldLabel>
                   <Controller
-                    name='summary'
+                    name="summary"
                     control={form.control}
                     render={({ field }) => (
                       <RichTextField
                         value={field.value}
                         onChange={(content) => {
-                          field.onChange(content)
+                          field.onChange(content);
                         }}
                         placeholder={tc.summary}
-                        section='personalDetails'
+                        section="personalDetails"
                         metadata={{ jobTitle: resume?.jobTitle }}
                         currentContent={field.value}
                       />
@@ -210,12 +216,24 @@ export const PersonalDetails = ({ translations = {} }: PersonalDetailsProps) => 
             <EditorFormFieldGroup>
               <EditorFieldRow>
                 <EditorFieldItem>
-                  <EditorFieldLabel htmlFor='phone'>{tc.phone}</EditorFieldLabel>
-                  <Input type='text' placeholder={tc.phone} {...register(`phone`)} />
+                  <EditorFieldLabel htmlFor="phone">
+                    {tc.phone}
+                  </EditorFieldLabel>
+                  <Input
+                    type="text"
+                    placeholder={tc.phone}
+                    {...register(`phone`)}
+                  />
                 </EditorFieldItem>
                 <EditorFieldItem>
-                  <EditorFieldLabel htmlFor='email'>{tc.email}</EditorFieldLabel>
-                  <Input type='text' placeholder={tc.email} {...register(`email`)} />
+                  <EditorFieldLabel htmlFor="email">
+                    {tc.email}
+                  </EditorFieldLabel>
+                  <Input
+                    type="text"
+                    placeholder={tc.email}
+                    {...register(`email`)}
+                  />
                 </EditorFieldItem>
               </EditorFieldRow>
             </EditorFormFieldGroup>
@@ -225,34 +243,35 @@ export const PersonalDetails = ({ translations = {} }: PersonalDetailsProps) => 
             <EditorFormFieldGroup>
               {fields.map((field, index) => (
                 <div key={field.id}>
-                  <EditorFieldRow className='flex-col sm:flex-row'>
+                  <EditorFieldRow className="flex-col sm:flex-row">
                     <EditorFieldItem>
                       <EditorFieldLabel htmlFor={`links.${index}.name`}>
                         {tc.name}
                       </EditorFieldLabel>
                       <Input
-                        type='text'
+                        type="text"
                         placeholder={tc.name}
                         {...register(`links.${index}.name`)}
                       />
                     </EditorFieldItem>
-                    <EditorFieldItem className='flex-row'>
+                    <EditorFieldItem className="flex-row">
                       <EditorFieldItem>
                         <EditorFieldLabel htmlFor={`links.${index}.url`}>
                           {tc.url}
                         </EditorFieldLabel>
                         <Input
-                          type='url'
+                          type="url"
                           placeholder={tc.url}
                           {...register(`links.${index}.url`)}
                         />
                       </EditorFieldItem>
                       <Button
-                        type='button'
-                        variant='ghost'
-                        size='icon'
+                        type="button"
+                        variant="ghost"
+                        size="icon"
                         onClick={() => handleRemove(index)}
-                        className='mt-6'>
+                        className="mt-6"
+                      >
                         <X size={16} />
                       </Button>
                     </EditorFieldItem>
@@ -261,11 +280,12 @@ export const PersonalDetails = ({ translations = {} }: PersonalDetailsProps) => 
               ))}
             </EditorFormFieldGroup>
             <Button
-              type='button'
-              variant='ghost'
-              size='sm'
+              type="button"
+              variant="ghost"
+              size="sm"
               onClick={() => append(newSocialLink)}
-              className='mt-3'>
+              className="mt-3"
+            >
               {tc.addLink}
               <Plus size={16} />
             </Button>
@@ -273,6 +293,5 @@ export const PersonalDetails = ({ translations = {} }: PersonalDetailsProps) => 
         </form>
       </Form>
     </>
-  )
-}
-
+  );
+};

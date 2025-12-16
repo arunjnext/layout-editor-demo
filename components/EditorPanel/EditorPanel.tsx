@@ -10,6 +10,7 @@ import { EditorPanelContainer } from "./EditorPanelContainer";
 import { EditorPanelItem } from "./EditorPanelItem";
 import { EditorSheet } from "./EditorSheet";
 import { EditorTopbar, ResumeTitle } from "./EditorTopbar";
+import { ItemGroup } from "@/components/ui/item";
 
 const defaultTranslations = {
   newResume: "New Resume",
@@ -68,7 +69,7 @@ export const EditorPanel = ({ translations = {} }: EditorPanelProps) => {
         <EditorPanelContainer
           className={`${isSheetActive ? "hidden" : "flex"}`}
         >
-          <div className="relative">
+          <ItemGroup className="relative w-full gap-0">
             {orderedSections.map((section) => {
               return (
                 <EditorPanelItem
@@ -78,7 +79,7 @@ export const EditorPanel = ({ translations = {} }: EditorPanelProps) => {
                 />
               );
             })}
-          </div>
+          </ItemGroup>
         </EditorPanelContainer>
         <EditorSheet
           isSheetActive={isSheetActive}

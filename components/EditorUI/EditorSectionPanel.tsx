@@ -173,15 +173,16 @@ export const EditorSectionVisibility = ({
   };
 
   return (
-    <div className="absolute right-0 inset-y-0 flex items-center gap-2 bg-background-alt border-l border-border z-10">
-      <Button
-        variant="ghost"
-        size="sm"
-        className="py-7 px-4 text-muted-foreground"
-        onClick={() => updateSectionsVisibility(resumeSection, 0)}
-      >
-        {isVisible ? <Eye /> : <EyeOff />}
-      </Button>
-    </div>
+    <Button
+      variant="ghost"
+      size="sm"
+      className="text-muted-foreground"
+      onClick={(e) => {
+        e.stopPropagation()
+        updateSectionsVisibility(resumeSection, 0)
+      }}
+    >
+      {isVisible ? <Eye /> : <EyeOff />}
+    </Button>
   );
 };
