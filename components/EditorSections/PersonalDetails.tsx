@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  EditorFieldCheckbox,
   EditorFieldItem,
   EditorFieldLabel,
   EditorFieldRow,
@@ -10,7 +9,6 @@ import { EditorFormBlock } from "@/components/EditorUI/EditorFormBlock";
 import { EditorFormFieldGroup } from "@/components/EditorUI/EditorFormFieldGroup";
 import { EditorFormTitle } from "@/components/EditorUI/EditorFormTitle";
 import { EditorPanelHeader } from "@/components/EditorUI/EditorPanelHeader";
-import { ProfileImageController } from "@/components/EditorUI/ProfileImageController";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -18,14 +16,14 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
-import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { useFieldRemove } from "@/hooks/useFieldRemove";
 import { useResume } from "@/hooks/useResume";
 import { newSocialLink } from "@/lib/utils/dataTransformers";
 import { resumeOptionValue } from "@/lib/utils/resumeConstants";
 import { Link, Mail, Phone, Plus, X } from "lucide-react";
-import { Controller, useFieldArray, useFormContext } from "react-hook-form";
+import { useFieldArray, useFormContext } from "react-hook-form";
+import AvatarUpload from "../file-upload/avatar-upload";
 
 const defaultTranslations = {
   yourDetails: "Your Details",
@@ -70,37 +68,15 @@ export const PersonalDetails = () => {
       />
       <form className="space-y-6">
         <EditorFormBlock>
-          <EditorFormTitle title={defaultTranslations.yourDetails} />
-          <EditorFieldRow className="gap-6 items-start">
+          <EditorFormBlock>
+            <AvatarUpload />
+          </EditorFormBlock>
+          <EditorFieldRow>
             <div className="flex shrink-0 flex-col gap-3">
               <EditorFieldItem className="gap-0!">
                 <EditorFieldLabel className="sr-only" htmlFor="profileImage">
                   {defaultTranslations.addAProfileImage}
                 </EditorFieldLabel>
-                <ProfileImageController
-                  name="profileImage"
-                  profileImageUrl={resume?.profileImage}
-                />
-              </EditorFieldItem>
-              <EditorFieldItem className="gap-0!">
-                <EditorFieldCheckbox>
-                  <Controller
-                    name="showProfileImage"
-                    control={control}
-                    render={({ field }) => (
-                      <Switch
-                        id="showProfileImage"
-                        checked={field.value ?? true}
-                        onCheckedChange={field.onChange}
-                        name={field.name}
-                        ref={field.ref}
-                      />
-                    )}
-                  />
-                  <EditorFieldLabel htmlFor="showProfileImage">
-                    {defaultTranslations.show}
-                  </EditorFieldLabel>
-                </EditorFieldCheckbox>
               </EditorFieldItem>
             </div>
             <EditorFormFieldGroup className="flex-1">
