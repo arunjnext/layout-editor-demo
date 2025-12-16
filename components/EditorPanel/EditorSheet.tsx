@@ -40,7 +40,7 @@ export const EditorSheet = ({ isSheetActive, activePanelId, children }: EditorSh
   }
 
   // Validate activePanelId before rendering
-  const validSectionIds = [
+  const validSectionIds: string[] = [
     resumeOptionValue.personalDetails,
     resumeOptionValue.experience,
     resumeOptionValue.skills,

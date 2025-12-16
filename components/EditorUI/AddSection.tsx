@@ -14,7 +14,7 @@ import { Eye, EyeOff, GripVertical, Plus, Trash2 } from "lucide-react";
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 
-const defaultTranslations = {
+const defaultTranslations: Record<string, string> = {
   addExperience: "Add Experience",
   addEducation: "Add Education",
   addSkill: "Add Skill",

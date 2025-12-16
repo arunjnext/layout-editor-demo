@@ -3,12 +3,13 @@
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { useEditor } from "@/hooks/useEditor";
+import type { ResumeSection } from "@/lib/utils/defaultResume";
 import { cn } from "@/lib/utils/helpers";
 import type { EditorSection } from "@/lib/utils/resumeConstants";
 import { ChevronRight, Eye, EyeOff, GripVertical } from "lucide-react";
 import type { ReactNode } from "react";
 
-const defaultTranslations = {
+const defaultTranslations: Record<string, string> = {
   personalDetails: "Personal Details",
   experience: "Experience",
   skills: "Skills",
@@ -99,7 +100,7 @@ export const EditorSectionDetails = ({
 };
 
 interface EditorSectionReorderProps {
-  dragControls?: any;
+  dragControls?: unknown;
   isVisible: boolean;
   className?: string;
 }
@@ -145,7 +146,11 @@ export const EditorSectionTrigger = ({
 };
 
 interface EditorSectionVisibilityProps {
-  section: EditorSection & { id: string };
+  section: EditorSection & {
+    id: string;
+    sectionKey?: string;
+    sectionName?: string;
+  };
   isVisible: boolean;
 }
 
@@ -155,13 +160,25 @@ export const EditorSectionVisibility = ({
 }: EditorSectionVisibilityProps) => {
   const { updateSectionsVisibility } = useEditor();
 
+  const resumeSection: ResumeSection = {
+    id: section.id,
+    sectionKey:
+      (section as EditorSection & { sectionKey?: string; sectionName?: string })
+        .sectionKey || section.id,
+    sectionName:
+      (section as EditorSection & { sectionKey?: string; sectionName?: string })
+        .sectionName || section.title,
+    isVisible: isVisible,
+    showInSidebar: true,
+  };
+
   return (
     <div className="absolute right-0 inset-y-0 flex items-center gap-2 bg-background-alt border-l border-border z-10">
       <Button
         variant="ghost"
         size="sm"
         className="py-7 px-4 text-muted-foreground"
-        onClick={() => updateSectionsVisibility(section as any, 0)}
+        onClick={() => updateSectionsVisibility(resumeSection, 0)}
       >
         {isVisible ? <Eye /> : <EyeOff />}
       </Button>

@@ -94,14 +94,12 @@ export const ResumeTitle = ({ title }: ResumeTitleProps) => {
           </form>
         </Form>
       ) : (
-        <Text
-          as='button'
-          variant='base'
-          weight='semibold'
-          className='max-w-40 w-full text-foreground truncate cursor-pointer'
+        <button
+          type='button'
+          className='max-w-40 w-full text-foreground truncate cursor-pointer text-base font-semibold'
           onClick={() => setIsEditResumeName(true)}>
           <span className='max-w-40 w-full text-foreground truncate'>{title}</span>
-        </Text>
+        </button>
       )}
       {!isEditResumeName && (
         <Button

@@ -19,6 +19,7 @@ interface Translations {
   back?: string
   save?: string
   visibility?: string
+  [key: string]: string | undefined
 }
 
 interface EditorNavigationProps {

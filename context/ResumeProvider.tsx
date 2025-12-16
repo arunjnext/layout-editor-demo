@@ -50,8 +50,8 @@ export const ResumeProvider = ({
 }: ResumeProviderProps) => {
   const [resume, setResume] = useState<Resume>(initialResume);
   const [isSaving, setIsSaving] = useState(false);
-  const debounceTimer = useRef<NodeJS.Timeout>();
-  const saveTimer = useRef<NodeJS.Timeout>();
+  const debounceTimer = useRef<NodeJS.Timeout | null>(null);
+  const saveTimer = useRef<NodeJS.Timeout | null>(null);
 
   // Update local state when prop changes
   useEffect(() => {

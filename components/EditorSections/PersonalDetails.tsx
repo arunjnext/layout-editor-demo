@@ -94,7 +94,7 @@ export const PersonalDetails = ({ translations = {} }: PersonalDetailsProps) => 
     }
   }, [_source, resume, setValue])
 
-  useCustomUndoRedo(_source, fields, 'links', setValue)
+  useCustomUndoRedo(_source, fields, 'links', setValue as (name: string, value: any, options?: any) => void)
 
   return (
     <>

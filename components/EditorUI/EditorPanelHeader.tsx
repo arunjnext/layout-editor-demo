@@ -15,7 +15,7 @@ import { SquarePen } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 
-const defaultTranslations = {
+const defaultTranslations: Record<string, string> = {
   personalDetails: "Personal Details",
   experience: "Experience",
   skills: "Skills",

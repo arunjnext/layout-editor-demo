@@ -110,7 +110,7 @@ export const EditorProvider = ({ children }: EditorProviderProps) => {
       }
 
       // Validate that the id matches a valid resumeOptionValue
-      const validSectionIds = [
+      const validSectionIds: string[] = [
         resumeOptionValue.personalDetails,
         resumeOptionValue.experience,
         resumeOptionValue.skills,

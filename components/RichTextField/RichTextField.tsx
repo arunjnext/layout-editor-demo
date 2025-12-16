@@ -359,6 +359,7 @@ export const RichTextField = ({
   return (
     <LexicalComposer
       initialConfig={{
+        namespace: "rich-text-editor",
         ...getEditorConfig(),
         editorState: value ? JSON.stringify(value) : null,
       }}
@@ -367,6 +368,7 @@ export const RichTextField = ({
         <RichTextPlugin
           contentEditable={
             <ContentEditable
+              aria-placeholder={placeholder || ""}
               placeholder={<Placeholder placeholder={placeholder || ""} />}
               className="min-h-36 max-h-96 overflow-y-auto px-4 pt-4 pb-16 thin-scrollbar bg-background border border-input shadow-sm focus:outline-none focus:border-blue-500 rounded-lg *:text-base/5"
             />

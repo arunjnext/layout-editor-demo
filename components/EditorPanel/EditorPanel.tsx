@@ -35,7 +35,7 @@ interface EditorPanelProps {
 
 export const EditorPanel = ({ translations = {} }: EditorPanelProps) => {
   const { activePanelId, isSheetActive } = useEditor();
-  const { resume, updateResume } = useResume();
+  const { resume } = useResume();
   const { name, jobTitle } = resume;
   const tc = { ...defaultTranslations, ...translations };
   const resumeName = getResumeTitle({ name, jobTitle }) || tc.newResume;
@@ -73,7 +73,7 @@ export const EditorPanel = ({ translations = {} }: EditorPanelProps) => {
               return (
                 <EditorPanelItem
                   key={section.id}
-                  section={section as any}
+                  section={section}
                   translations={tc}
                 />
               );

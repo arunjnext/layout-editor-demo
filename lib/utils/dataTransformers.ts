@@ -56,6 +56,7 @@ export const removeId = <T extends { id?: string }>(item: T): Omit<T, 'id'> => {
 export interface SocialLink {
   url: string
   name: string
+  id?: string
 }
 
 export const newSocialLink: SocialLink = {

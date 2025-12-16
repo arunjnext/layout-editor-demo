@@ -31,14 +31,18 @@ export const EditorPanelItem = ({ section, translations = {} }: EditorPanelItemP
           className={isPersonalDetails ? 'invisible' : ''}
         />
         <EditorSectionDetails
-          section={section as any}
+          section={{
+            ...section,
+            sectionKey: sectionKey,
+            sectionName: (section as any).sectionName,
+          }}
           isVisible={isVisible}
           onClick={() => handlePanelClick(sectionKey)}
           translations={translations}
         />
         <div className='absolute right-0 inset-y-0'>
           {visiblityControls && !isPersonalDetails ? (
-            <EditorSectionVisibility section={section as any} isVisible={isVisible} />
+            <EditorSectionVisibility section={section} isVisible={isVisible} />
           ) : (
             <EditorSectionTrigger
               isVisible={isVisible}

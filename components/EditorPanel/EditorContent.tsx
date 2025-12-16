@@ -31,7 +31,7 @@ export const EditorContent = ({
   // Log warning for invalid activePanelId
   useEffect(() => {
     if (activePanelId) {
-      const validSectionIds = [
+      const validSectionIds: string[] = [
         resumeOptionValue.personalDetails,
         resumeOptionValue.experience,
         resumeOptionValue.skills,
