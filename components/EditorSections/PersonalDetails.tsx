@@ -8,20 +8,25 @@ import {
 import { EditorFormBlock } from "@/components/EditorUI/EditorFormBlock";
 import { EditorFormFieldGroup } from "@/components/EditorUI/EditorFormFieldGroup";
 import { EditorFormTitle } from "@/components/EditorUI/EditorFormTitle";
-import { EditorPanelHeader } from "@/components/EditorUI/EditorPanelHeader";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemGroup,
+} from "@/components/ui/item";
 import { Textarea } from "@/components/ui/textarea";
 import { useFieldRemove } from "@/hooks/useFieldRemove";
 import { useResume } from "@/hooks/useResume";
 import { newSocialLink } from "@/lib/utils/dataTransformers";
-import { resumeOptionValue } from "@/lib/utils/resumeConstants";
-import { Link, Mail, Phone, Plus, X } from "lucide-react";
+import { Link, Mail, Phone, Plus, Trash } from "lucide-react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import AvatarUpload from "../file-upload/avatar-upload";
 
@@ -42,7 +47,17 @@ const defaultTranslations = {
   addLink: "Add Link",
 };
 
-export const PersonalDetails = () => {
+type PersonalDetailsVariant =
+  | "with-profile"
+  | "with-contact"
+  | "minimal"
+  | "card";
+
+interface PersonalDetailsProps {
+  variant?: PersonalDetailsVariant;
+}
+
+export const PersonalDetails = ({ variant = "card" }: PersonalDetailsProps) => {
   const { resume } = useResume();
   const { control, register } = useFormContext();
 
@@ -59,175 +74,201 @@ export const PersonalDetails = () => {
     data,
   });
 
+  // Determine which sections to show based on variant
+  const showProfileImage = variant === "with-profile";
+  const showContactDetails = variant === "with-contact" || variant === "card";
+  const showLinks =
+    variant === "with-contact" || variant === "minimal" || variant === "card";
+  const useCardWrapper = variant === "card";
+
+  // Basic fields section (always shown)
+  const basicFieldsSection = (
+    <EditorFormBlock>
+      {showProfileImage && (
+        <EditorFormBlock>
+          <AvatarUpload />
+        </EditorFormBlock>
+      )}
+      <EditorFormFieldGroup>
+        <EditorFieldRow className="flex-row">
+          <EditorFieldItem className="flex-1">
+            <EditorFieldLabel htmlFor="firstName">
+              {defaultTranslations.firstName}
+            </EditorFieldLabel>
+            <Input
+              type="text"
+              placeholder={defaultTranslations.firstName}
+              {...register(`firstName`)}
+            />
+          </EditorFieldItem>
+          <EditorFieldItem className="flex-1">
+            <EditorFieldLabel htmlFor="lastName">
+              {defaultTranslations.lastName}
+            </EditorFieldLabel>
+            <Input
+              type="text"
+              placeholder={defaultTranslations.lastName}
+              {...register(`lastName`)}
+            />
+          </EditorFieldItem>
+        </EditorFieldRow>
+        <EditorFieldRow>
+          <EditorFieldItem>
+            <EditorFieldLabel htmlFor="jobTitle">
+              {defaultTranslations.desiredJobTitle}
+            </EditorFieldLabel>
+            <Input
+              type="text"
+              placeholder={defaultTranslations.desiredJobTitle}
+              {...register(`jobTitle`)}
+            />
+          </EditorFieldItem>
+        </EditorFieldRow>
+      </EditorFormFieldGroup>
+    </EditorFormBlock>
+  );
+
+  // Summary section (always shown)
+  const summarySection = (
+    <EditorFormBlock>
+      <EditorFormTitle title={defaultTranslations.summary} />
+      <EditorFormFieldGroup>
+        <EditorFieldRow>
+          <EditorFieldItem>
+            <EditorFieldLabel className="sr-only" htmlFor="summary">
+              {defaultTranslations.summary}
+            </EditorFieldLabel>
+            <Textarea
+              id="summary"
+              placeholder={defaultTranslations.summary}
+              {...register("summary")}
+              rows={6}
+            />
+          </EditorFieldItem>
+        </EditorFieldRow>
+      </EditorFormFieldGroup>
+    </EditorFormBlock>
+  );
+
+  // Contact details section
+  const contactDetailsSection = showContactDetails ? (
+    <EditorFormBlock>
+      <EditorFormTitle title={defaultTranslations.contactDetails} />
+      <EditorFormFieldGroup>
+        <EditorFieldRow className="flex-row">
+          <EditorFieldItem className="flex-1">
+            <EditorFieldLabel htmlFor="phone">
+              {defaultTranslations.phone}
+            </EditorFieldLabel>
+            <InputGroup>
+              <InputGroupInput
+                type="text"
+                placeholder={defaultTranslations.phone}
+                {...register(`phone`)}
+              />
+              <InputGroupAddon>
+                <Phone />
+              </InputGroupAddon>
+            </InputGroup>
+          </EditorFieldItem>
+          <EditorFieldItem className="flex-1">
+            <EditorFieldLabel htmlFor="email">
+              {defaultTranslations.email}
+            </EditorFieldLabel>
+            <InputGroup>
+              <InputGroupInput
+                type="text"
+                placeholder={defaultTranslations.email}
+                {...register(`email`)}
+              />
+              <InputGroupAddon>
+                <Mail />
+              </InputGroupAddon>
+            </InputGroup>
+          </EditorFieldItem>
+        </EditorFieldRow>
+      </EditorFormFieldGroup>
+    </EditorFormBlock>
+  ) : null;
+
+  // Links section
+  const linksSection = showLinks ? (
+    <EditorFormBlock>
+      <EditorFormTitle title={defaultTranslations.links} />
+      <ItemGroup>
+        {fields.map((field, index) => (
+          <Item
+            key={field.id}
+            variant="outline"
+            className="border border-dashed"
+          >
+            <ItemContent className="flex-1 gap-3 flex-row">
+              <div className="flex flex-col gap-2 flex-1">
+                <Input
+                  type="text"
+                  placeholder={defaultTranslations.name}
+                  {...register(`links.${index}.name`)}
+                />
+              </div>
+              <div className="flex flex-col gap-2 flex-1">
+                <InputGroup>
+                  <InputGroupInput
+                    type="url"
+                    placeholder={defaultTranslations.url}
+                    {...register(`links.${index}.url`)}
+                  />
+                  <InputGroupAddon>
+                    <Link size={16} />
+                  </InputGroupAddon>
+                </InputGroup>
+              </div>
+            </ItemContent>
+            <ItemActions>
+              <Button
+                type="button"
+                variant="destructive"
+                size="icon"
+                onClick={() => handleRemove(index)}
+                className="h-8 w-8"
+              >
+                <Trash size={16} />
+              </Button>
+            </ItemActions>
+          </Item>
+        ))}
+      </ItemGroup>
+      <Button
+        type="button"
+        variant="outline"
+        size="sm"
+        onClick={() => append(newSocialLink)}
+        className="mt-3"
+      >
+        {defaultTranslations.addLink}
+        <Plus size={16} />
+      </Button>
+    </EditorFormBlock>
+  ) : null;
+
+  // Form content
+  const formContent = (
+    <form className="space-y-6">
+      {basicFieldsSection}
+      {summarySection}
+      {contactDetailsSection}
+      {linksSection}
+    </form>
+  );
+
   return (
     <>
-      <EditorPanelHeader
-        editable={false}
-        sectionKey={resumeOptionValue.personalDetails}
-        description="Edit your personal details"
-      />
-      <form className="space-y-6">
-        <EditorFormBlock>
-          <EditorFormBlock>
-            <AvatarUpload />
-          </EditorFormBlock>
-          <EditorFieldRow>
-            <div className="flex shrink-0 flex-col gap-3">
-              <EditorFieldItem className="gap-0!">
-                <EditorFieldLabel className="sr-only" htmlFor="profileImage">
-                  {defaultTranslations.addAProfileImage}
-                </EditorFieldLabel>
-              </EditorFieldItem>
-            </div>
-            <EditorFormFieldGroup className="flex-1">
-              <EditorFieldRow className="flex-row">
-                <EditorFieldItem className="flex-1">
-                  <EditorFieldLabel htmlFor="firstName">
-                    {defaultTranslations.firstName}
-                  </EditorFieldLabel>
-                  <Input
-                    type="text"
-                    placeholder={defaultTranslations.firstName}
-                    {...register(`firstName`)}
-                  />
-                </EditorFieldItem>
-                <EditorFieldItem className="flex-1">
-                  <EditorFieldLabel htmlFor="lastName">
-                    {defaultTranslations.lastName}
-                  </EditorFieldLabel>
-                  <Input
-                    type="text"
-                    placeholder={defaultTranslations.lastName}
-                    {...register(`lastName`)}
-                  />
-                </EditorFieldItem>
-              </EditorFieldRow>
-              <EditorFieldRow>
-                <EditorFieldItem>
-                  <EditorFieldLabel htmlFor="jobTitle">
-                    {defaultTranslations.desiredJobTitle}
-                  </EditorFieldLabel>
-                  <Input
-                    type="text"
-                    placeholder={defaultTranslations.desiredJobTitle}
-                    {...register(`jobTitle`)}
-                  />
-                </EditorFieldItem>
-              </EditorFieldRow>
-            </EditorFormFieldGroup>
-          </EditorFieldRow>
-        </EditorFormBlock>
-        <EditorFormBlock>
-          <EditorFormTitle title={defaultTranslations.summary} />
-          <EditorFormFieldGroup>
-            <EditorFieldRow>
-              <EditorFieldItem>
-                <EditorFieldLabel className="sr-only" htmlFor="summary">
-                  {defaultTranslations.summary}
-                </EditorFieldLabel>
-                <Textarea
-                  id="summary"
-                  placeholder={defaultTranslations.summary}
-                  {...register("summary")}
-                  rows={6}
-                />
-              </EditorFieldItem>
-            </EditorFieldRow>
-          </EditorFormFieldGroup>
-        </EditorFormBlock>
-        <EditorFormBlock>
-          <EditorFormTitle title={defaultTranslations.contactDetails} />
-          <EditorFormFieldGroup>
-            <EditorFieldRow className="flex-row">
-              <EditorFieldItem className="flex-1">
-                <EditorFieldLabel htmlFor="phone">
-                  {defaultTranslations.phone}
-                </EditorFieldLabel>
-                <InputGroup>
-                  <InputGroupInput
-                    type="text"
-                    placeholder={defaultTranslations.phone}
-                    {...register(`phone`)}
-                  />
-                  <InputGroupAddon>
-                    <Phone />
-                  </InputGroupAddon>
-                </InputGroup>
-              </EditorFieldItem>
-              <EditorFieldItem className="flex-1">
-                <EditorFieldLabel htmlFor="email">
-                  {defaultTranslations.email}
-                </EditorFieldLabel>
-                <InputGroup>
-                  <InputGroupInput
-                    type="text"
-                    placeholder={defaultTranslations.email}
-                    {...register(`email`)}
-                  />
-                  <InputGroupAddon>
-                    <Mail />
-                  </InputGroupAddon>
-                </InputGroup>
-              </EditorFieldItem>
-            </EditorFieldRow>
-          </EditorFormFieldGroup>
-        </EditorFormBlock>
-        <EditorFormBlock>
-          <EditorFormTitle title={defaultTranslations.links} />
-          <EditorFormFieldGroup>
-            {fields.map((field, index) => (
-              <div key={field.id}>
-                <EditorFieldRow className="flex-row items-end gap-2">
-                  <EditorFieldItem className="flex-1">
-                    <EditorFieldLabel htmlFor={`links.${index}.name`}>
-                      {defaultTranslations.name}
-                    </EditorFieldLabel>
-                    <Input
-                      type="text"
-                      placeholder={defaultTranslations.name}
-                      {...register(`links.${index}.name`)}
-                    />
-                  </EditorFieldItem>
-                  <EditorFieldItem className="flex-1">
-                    <EditorFieldLabel htmlFor={`links.${index}.url`}>
-                      {defaultTranslations.url}
-                    </EditorFieldLabel>
-                    <InputGroup>
-                      <InputGroupInput
-                        type="url"
-                        placeholder={defaultTranslations.url}
-                        {...register(`links.${index}.url`)}
-                      />
-                      <InputGroupAddon>
-                        <Link />
-                      </InputGroupAddon>
-                    </InputGroup>
-                  </EditorFieldItem>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => handleRemove(index)}
-                    className="shrink-0 h-10 w-10"
-                  >
-                    <X size={16} />
-                  </Button>
-                </EditorFieldRow>
-              </div>
-            ))}
-          </EditorFormFieldGroup>
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={() => append(newSocialLink)}
-            className="mt-3"
-          >
-            {defaultTranslations.addLink}
-            <Plus size={16} />
-          </Button>
-        </EditorFormBlock>
-      </form>
+      {useCardWrapper ? (
+        <Card className="ring-0 border border-dashed">
+          <CardContent className="pt-6 border-none">{formContent}</CardContent>
+        </Card>
+      ) : (
+        formContent
+      )}
     </>
   );
 };
