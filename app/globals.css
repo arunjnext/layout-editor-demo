@@ -124,3 +124,130 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+
+
+
+
+/* Resume Container - Target engine-generated content */
+.resume-container {
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+/* Style any pages created by the engine */
+.resume-container > div {
+  width: 210mm;
+  min-height: 297mm;
+  padding: 40px 60px;
+  margin: 0 auto 20px;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.resume-container > div:last-child {
+  margin-bottom: 0;
+}
+
+/* Style experience/position blocks */
+.resume-container [class*="position"],
+.resume-container [class*="experience"],
+.resume-container section,
+.resume-container article {
+  margin-bottom: 24px;
+}
+
+/* Style headings that the engine creates */
+.resume-container h1,
+.resume-container h2,
+.resume-container h3,
+.resume-container h4 {
+  margin: 0 0 8px 0;
+  color: #2c3e50;
+  font-weight: 700;
+}
+
+.resume-container h1 {
+  font-size: 24px;
+  margin-bottom: 12px;
+}
+
+.resume-container h2 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.resume-container h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #667eea;
+}
+
+.resume-container h4 {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Style paragraphs and text */
+.resume-container p {
+  margin: 8px 0;
+  line-height: 1.6;
+  font-size: 14px;
+  color: #444;
+}
+
+/* Style lists */
+.resume-container ul,
+.resume-container ol {
+  margin: 10px 0;
+  padding-left: 24px;
+}
+
+.resume-container li {
+  font-size: 13px;
+  line-height: 1.6;
+  margin-bottom: 6px;
+  color: #444;
+}
+
+/* Style dates and metadata */
+.resume-container [class*="date"],
+.resume-container time,
+.resume-container small {
+  font-size: 12px;
+  color: #666;
+  font-style: italic;
+}
+
+/* Style strong/bold text */
+.resume-container strong,
+.resume-container b {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+/* Style emphasis */
+.resume-container em,
+.resume-container i {
+  font-style: italic;
+  color: #555;
+}
+
+/* Print Styles */
+@media print {
+  .resume-container > div {
+    box-shadow: none;
+    margin: 0;
+    page-break-after: always;
+  }
+
+  .resume-container > div:last-child {
+    page-break-after: auto;
+  }
+  
+  .resume-container {
+    background: white;
+  }
+}

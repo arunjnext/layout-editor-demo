@@ -16,12 +16,14 @@ export default function Page() {
         <EditorProvider>
           <div className="h-screen w-full flex overflow-hidden">
             {/* Left column: Resume Preview - Hidden on mobile and tablet */}
-            <div className="hidden lg:flex flex-1 h-full overflow-hidden border-r border-border">
-              <ResumePreview />
+            <div className="hidden lg:flex flex-1 h-full overflow-y-auto border-r border-border bg-gray-50">
+              <div className="w-full p-6">
+                <ResumePreview />
+              </div>
             </div>
 
             {/* Right column: Editor Panel - Full width on mobile/tablet */}
-            <div className="flex-1 h-full lg:max-w-xl overflow-hidden bg-background">
+            <div className="flex-1 h-full lg:max-w-2xl overflow-y-auto bg-background">
               <EditorPanel />
             </div>
           </div>

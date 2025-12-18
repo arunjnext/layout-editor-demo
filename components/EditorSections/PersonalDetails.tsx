@@ -22,12 +22,30 @@ import {
   ItemContent,
   ItemGroup,
 } from "@/components/ui/item";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useFieldRemove } from "@/hooks/useFieldRemove";
 import { useResume } from "@/hooks/useResume";
 import { newSocialLink } from "@/lib/utils/dataTransformers";
-import { Link, Mail, Phone, Plus, Trash } from "lucide-react";
-import { useFieldArray, useFormContext } from "react-hook-form";
+import {
+  Github,
+  Globe,
+  Instagram,
+  Linkedin,
+  Mail,
+  Phone,
+  Plus,
+  Trash,
+  Twitter,
+  Youtube,
+} from "lucide-react";
+import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 import AvatarUpload from "../file-upload/avatar-upload";
 
 const defaultTranslations = {
@@ -41,11 +59,26 @@ const defaultTranslations = {
   contactDetails: "Contact Details",
   phone: "Phone",
   email: "Email",
-  links: "Links",
-  name: "Name",
+  socialProfiles: "Social Profiles",
+  selectProvider: "Select Provider",
   url: "URL",
-  addLink: "Add Link",
+  addSocialProfile: "Add Social Profile",
 };
+
+type SocialProvider = {
+  value: string;
+  label: string;
+  icon: React.ComponentType<{ size?: number; className?: string }>;
+};
+
+const socialProviders: SocialProvider[] = [
+  { value: "linkedin", label: "LinkedIn", icon: Linkedin },
+  { value: "twitter", label: "Twitter", icon: Twitter },
+  { value: "github", label: "GitHub", icon: Github },
+  { value: "instagram", label: "Instagram", icon: Instagram },
+  { value: "youtube", label: "YouTube", icon: Youtube },
+  { value: "website", label: "Website", icon: Globe },
+];
 
 type PersonalDetailsVariant =
   | "with-profile"
@@ -59,7 +92,7 @@ interface PersonalDetailsProps {
 
 export const PersonalDetails = ({ variant = "card" }: PersonalDetailsProps) => {
   const { resume } = useResume();
-  const { control, register } = useFormContext();
+  const { control, register, watch, setValue } = useFormContext();
 
   const data = resume?.links || [];
 
@@ -191,51 +224,104 @@ export const PersonalDetails = ({ variant = "card" }: PersonalDetailsProps) => {
     </EditorFormBlock>
   ) : null;
 
-  // Links section
+  // Social Profiles section
   const linksSection = showLinks ? (
     <EditorFormBlock>
-      <EditorFormTitle title={defaultTranslations.links} />
+      <EditorFormTitle title={defaultTranslations.socialProfiles} />
       <ItemGroup>
-        {fields.map((field, index) => (
-          <Item
-            key={field.id}
-            variant="outline"
-            className="border border-dashed"
-          >
-            <ItemContent className="flex-1 gap-3 flex-row">
-              <div className="flex flex-col gap-2 flex-1">
-                <Input
-                  type="text"
-                  placeholder={defaultTranslations.name}
-                  {...register(`links.${index}.name`)}
-                />
-              </div>
-              <div className="flex flex-col gap-2 flex-1">
-                <InputGroup>
-                  <InputGroupInput
-                    type="url"
-                    placeholder={defaultTranslations.url}
-                    {...register(`links.${index}.url`)}
+        {fields.map((field, index) => {
+          const providerValue = watch(`links.${index}.provider`) || "";
+          const selectedProvider = socialProviders.find(
+            (p) => p.value === providerValue
+          );
+          const ProviderIcon = selectedProvider?.icon || Globe;
+
+          return (
+            <Item
+              key={field.id}
+              variant="outline"
+              className="border border-dashed"
+            >
+              <ItemContent className="flex-1 gap-3 flex-row">
+                <div className="flex flex-col gap-2 flex-1">
+                  <Controller
+                    name={`links.${index}.provider`}
+                    control={control}
+                    render={({ field: providerField }) => (
+                      <Select
+                        value={providerField.value || ""}
+                        onValueChange={(value) => {
+                          providerField.onChange(value);
+                          // Update name field when provider changes
+                          const provider = socialProviders.find(
+                            (p) => p.value === value
+                          );
+                          if (provider) {
+                            setValue(`links.${index}.name`, provider.label);
+                          }
+                        }}
+                      >
+                        <SelectTrigger>
+                          <SelectValue>
+                            {selectedProvider ? (
+                              <div className="flex items-center gap-2">
+                                <ProviderIcon size={16} />
+                                <span>{selectedProvider.label}</span>
+                              </div>
+                            ) : (
+                              <span className="text-muted-foreground">
+                                {defaultTranslations.selectProvider}
+                              </span>
+                            )}
+                          </SelectValue>
+                        </SelectTrigger>
+                        <SelectContent>
+                          {socialProviders.map((provider) => {
+                            const Icon = provider.icon;
+                            return (
+                              <SelectItem
+                                key={provider.value}
+                                value={provider.value}
+                              >
+                                <div className="flex items-center gap-2">
+                                  <Icon size={16} />
+                                  <span>{provider.label}</span>
+                                </div>
+                              </SelectItem>
+                            );
+                          })}
+                        </SelectContent>
+                      </Select>
+                    )}
                   />
-                  <InputGroupAddon>
-                    <Link size={16} />
-                  </InputGroupAddon>
-                </InputGroup>
-              </div>
-            </ItemContent>
-            <ItemActions>
-              <Button
-                type="button"
-                variant="destructive"
-                size="icon"
-                onClick={() => handleRemove(index)}
-                className="h-8 w-8"
-              >
-                <Trash size={16} />
-              </Button>
-            </ItemActions>
-          </Item>
-        ))}
+                </div>
+                <div className="flex flex-col gap-2 flex-1">
+                  <InputGroup>
+                    <InputGroupInput
+                      type="url"
+                      placeholder={defaultTranslations.url}
+                      {...register(`links.${index}.url`)}
+                    />
+                    <InputGroupAddon>
+                      <ProviderIcon size={16} />
+                    </InputGroupAddon>
+                  </InputGroup>
+                </div>
+              </ItemContent>
+              <ItemActions>
+                <Button
+                  type="button"
+                  variant="destructive"
+                  size="icon"
+                  onClick={() => handleRemove(index)}
+                  className="h-8 w-8"
+                >
+                  <Trash size={16} />
+                </Button>
+              </ItemActions>
+            </Item>
+          );
+        })}
       </ItemGroup>
       <Button
         type="button"
@@ -244,7 +330,7 @@ export const PersonalDetails = ({ variant = "card" }: PersonalDetailsProps) => {
         onClick={() => append(newSocialLink)}
         className="mt-3"
       >
-        {defaultTranslations.addLink}
+        {defaultTranslations.addSocialProfile}
         <Plus size={16} />
       </Button>
     </EditorFormBlock>

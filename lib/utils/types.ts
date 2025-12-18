@@ -4,6 +4,7 @@ export interface SocialLink {
   id?: string
   url: string
   name: string
+  provider?: string
 }
 
 export interface ExperienceItem {

@@ -32,12 +32,14 @@ export const removeId = <T extends { id?: string }>(item: T): Omit<T, 'id'> => {
 export interface SocialLink {
   url: string
   name: string
+  provider?: string
   id?: string
 }
 
 export const newSocialLink: SocialLink = {
   url: '',
-  name: ''
+  name: '',
+  provider: ''
 }
 
 export interface ResumeData {
