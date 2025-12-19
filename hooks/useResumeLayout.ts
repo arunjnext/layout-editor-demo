@@ -58,6 +58,8 @@ export function useResumeLayout(config: Omit<LayoutEngineConfig, 'container'>) {
     const newEngine = new ResumeLayoutEngine({
       ...configRef.current,
       container: containerRef.current,
+
+      
       events: {
         ...configRef.current.events,
         onPageCreated: (pageIndex, pageElement) => {

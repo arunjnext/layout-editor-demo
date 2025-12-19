@@ -42,8 +42,8 @@ importers:
         specifier: ^7.54.2
         version: 7.68.0(react@19.2.1)
       resume-layout-engine:
-        specifier: ^1.0.0
-        version: 1.0.0(react@19.2.1)
+        specifier: ^1.1.1
+        version: 1.1.1(react@19.2.1)
       shadcn:
         specifier: ^3.6.1
         version: 3.6.1(@types/node@20.19.27)(hono@4.11.1)(typescript@5.9.3)
@@ -2534,8 +2534,8 @@ packages:
     resolution: {integrity: sha512-oMA2dcrw6u0YfxJQXm342bFKX/E4sG9rbTzO9ptUcR/e8A33cHuvStiYOwH7fszkZlZ1z/ta9AAoPk2F4qIOHA==}
     engines: {node: '>=18'}
 
-  resume-layout-engine@1.0.0:
-    resolution: {integrity: sha512-m74Wqse/xpm/YC7pHKdlI2du4V/Let7j8ibPIaoWtSoUU48lTBP9myXStnCuyywZC0SC1Qmk+DQ1gupLOGMX4Q==}
+  resume-layout-engine@1.1.1:
+    resolution: {integrity: sha512-WMpBXQFXvuBoYbrtRYOhKkmBYenI+IzzLao+WArwuCMAyl7nCyOU44FZ0SeHNbKEfZ3sjQ7mKKZOJNI6fAF9wQ==}
     peerDependencies:
       react: '>=16.8.0'
     peerDependenciesMeta:
@@ -5570,7 +5570,7 @@ snapshots:
       onetime: 7.0.0
       signal-exit: 4.1.0
 
-  resume-layout-engine@1.0.0(react@19.2.1):
+  resume-layout-engine@1.1.1(react@19.2.1):
     optionalDependencies:
       react: 19.2.1
 

@@ -144,12 +144,15 @@ export function ExperienceForm({ index, onRemove }: ExperienceFormProps) {
                 render={({ field }) => (
                   <div className="space-y-2">
                     {Array.isArray(field.value) &&
-                      field.value.map((_, achIndex) => (
+                      field.value.map((item, achIndex) => (
                         <div key={achIndex} className="flex gap-2 items-start">
                           <Textarea
-                            {...register(
-                              `experience.${index}.description.${achIndex}`
-                            )}
+                            value={item || ""}
+                            onChange={(e) => {
+                              const newDesc = [...field.value];
+                              newDesc[achIndex] = e.target.value;
+                              field.onChange(newDesc);
+                            }}
                             placeholder={`Achievement ${achIndex + 1}...`}
                             rows={2}
                             className="flex-1 resize-none"

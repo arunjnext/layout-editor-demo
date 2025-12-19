@@ -34,7 +34,6 @@ export function ResumePreview() {
     defaultValue: [],
   }) as Position[];
 
-  console.log(experiences, "experiences");
   const { containerRef, engine, isReady, pageCount, remainingSpace } =
     useResumeLayout({
       page: {
@@ -110,7 +109,21 @@ export function ResumePreview() {
 
         // Add all experiences
         for (const experience of experiences) {
-          await engine.addExperience(experience);
+          // Clean the experience data before sending to engine
+          const cleanedExperience = {
+            ...experience,
+            // Filter out empty strings from description array
+            description: (experience.description || []).filter(
+              (item: string) => item && item.trim() !== ""
+            ),
+          };
+
+          // Debug: Log the experience data being sent to the engine
+          console.log(
+            "Adding experience to engine:",
+            JSON.stringify(cleanedExperience, null, 2)
+          );
+          await engine.addExperience(cleanedExperience);
         }
       } catch (error) {
         console.error("Error updating experiences:", error);
