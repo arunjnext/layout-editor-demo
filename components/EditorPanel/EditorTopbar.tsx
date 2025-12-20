@@ -4,7 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useResume } from "@/hooks/useResume";
-import { SquarePen } from "lucide-react";
+import {
+  generateSampleEducations,
+  generateSampleExperiences,
+} from "@/lib/utils/sampleDataGenerator";
+import { Sparkles, SquarePen } from "lucide-react";
 import type { ReactNode } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -16,8 +20,46 @@ interface EditorTopbarProps {
 export const EditorTopbar = ({ children }: EditorTopbarProps) => {
   return (
     <div className="bg-background border-b border-border flex items-center justify-between px-4 lg:px-6 py-5">
-      {children}
+      <div className="flex items-center gap-3">{children}</div>
+      <CreateSampleDataButton />
     </div>
+  );
+};
+
+export const CreateSampleDataButton = () => {
+  const { updateResume, resume } = useResume();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleCreateSampleData = useCallback(() => {
+    setIsLoading(true);
+
+    // Generate sample data
+    const sampleExperiences = generateSampleExperiences(3);
+    const sampleEducations = generateSampleEducations(2);
+
+    // Update resume with sample data
+    updateResume({
+      experience: [...(resume.experience || []), ...sampleExperiences],
+      education: [...(resume.education || []), ...sampleEducations],
+    });
+
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
+  }, [updateResume, resume]);
+
+  return (
+    <Button
+      type="button"
+      onClick={handleCreateSampleData}
+      disabled={isLoading}
+      variant="outline"
+      size="sm"
+      className="gap-2"
+    >
+      <Sparkles size={16} />
+      {isLoading ? "Generating..." : "Create Sample Data"}
+    </Button>
   );
 };
 

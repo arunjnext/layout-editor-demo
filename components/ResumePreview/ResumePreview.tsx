@@ -1,9 +1,11 @@
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useResumeLayout } from "@/hooks/useResumeLayout";
 import { Resume } from "@/lib/utils/defaultResume";
 import { EducationItem } from "@/lib/utils/types";
-import { useEffect, useRef } from "react";
+import { Columns2 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import type { Position } from "resume-layout-engine";
 
@@ -28,6 +30,7 @@ import type { Position } from "resume-layout-engine";
  */
 export function ResumePreview() {
   const { control } = useFormContext();
+  const [columnCount, setColumnCount] = useState<1 | 2>(2);
 
   // Watch the entire form for any changes
   const formData = useWatch({
@@ -54,9 +57,9 @@ export function ResumePreview() {
           fontFamily: "Arial, sans-serif",
           fontSize: "14px",
           lineHeight: 1.6,
-          columnCount: 2,
+          columnCount: columnCount,
           columnGap: 20,
-          columnWidths: [3, 2], // 60%/40% ratio
+          columnWidths: columnCount === 2 ? [3, 2] : undefined, // 60%/40% ratio for 2 columns
           spaces: {
             work: {
               marginTop: 16,
@@ -91,6 +94,14 @@ export function ResumePreview() {
   const prevFormDataRef = useRef<Partial<Resume>>(null);
 
   // Single unified update function for the entire resume
+  // Reset the prevFormDataRef when engine changes (e.g., column toggle)
+  // This ensures content gets re-added when the engine is recreated
+  useEffect(() => {
+    if (engine) {
+      prevFormDataRef.current = null;
+    }
+  }, [engine]);
+
   useEffect(() => {
     if (!engine || !isReady) return;
 
@@ -148,7 +159,7 @@ export function ResumePreview() {
                   ?.split("\n")
                   .filter((line: string) => line.trim()) || [],
             },
-            1
+            columnCount === 1 ? 0 : 1
           );
         }
       } catch (error) {
@@ -174,17 +185,40 @@ export function ResumePreview() {
     <div className="w-full max-w-[794px] mx-auto space-y-6">
       {/* Stats Card */}
       <Card>
-        <CardContent>
+        <CardContent className="flex items-center justify-between gap-4">
           <Badge
             variant={getRemainingSpaceBadgeVariant(remainingSpace)}
             className={getRemainingSpaceBadgeClass(remainingSpace)}
           >
             {pageCount} pages, {remainingSpace}px remaining
           </Badge>
+
+          {/* Column Toggle */}
+          <div className="flex items-center gap-2">
+            <Button
+              variant={columnCount === 1 ? "default" : "outline"}
+              size="sm"
+              onClick={() => setColumnCount(1)}
+              className="gap-2"
+            >
+              <Columns2 size={16} />
+              <span>1 Column</span>
+            </Button>
+            <Button
+              variant={columnCount === 2 ? "default" : "outline"}
+              size="sm"
+              onClick={() => setColumnCount(2)}
+              className="gap-2"
+            >
+              <Columns2 size={16} />
+              <span>2 Columns</span>
+            </Button>
+          </div>
         </CardContent>
       </Card>
       {/* Resume Container - Fixed A4 Size */}
       <div
+        key={`resume-container-${columnCount}`}
         ref={containerRef}
         className="resume-container bg-white"
         style={{

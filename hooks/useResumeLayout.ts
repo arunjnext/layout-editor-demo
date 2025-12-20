@@ -45,10 +45,18 @@ export function useResumeLayout(config: Omit<LayoutEngineConfig, 'container'>) {
 
   // Store config and callbacks in ref to avoid recreating engine on every render
   const configRef = useRef(config);
-  
+
   // Update config ref in effect to avoid updating during render
   useEffect(() => {
     configRef.current = config;
+  });
+
+  // Create a stable key from config to detect when we need to recreate the engine
+  const configKey = JSON.stringify({
+    columnCount: config.template?.style?.columnCount,
+    columnWidths: config.template?.style?.columnWidths,
+    pageWidth: config.page?.width,
+    pageHeight: config.page?.height,
   });
 
   useEffect(() => {
@@ -59,7 +67,7 @@ export function useResumeLayout(config: Omit<LayoutEngineConfig, 'container'>) {
       ...configRef.current,
       container: containerRef.current,
 
-      
+
       events: {
         ...configRef.current.events,
         onPageCreated: (pageIndex, pageElement) => {
@@ -86,14 +94,14 @@ export function useResumeLayout(config: Omit<LayoutEngineConfig, 'container'>) {
     setPageCount(newEngine.getPageCount());
     setRemainingSpace(newEngine.getRemainingSpace());
 
-    // Cleanup on unmount
+    // Cleanup on unmount or when config changes
     return () => {
       newEngine.destroy();
       engineRef.current = null;
       setEngine(null);
       setIsReady(false);
     };
-  }, []); // Empty deps - only create once
+  }, [configKey]); // Recreate engine when config changes
 
   // Helper methods
   const addExperience = useCallback(async (position: Position) => {
