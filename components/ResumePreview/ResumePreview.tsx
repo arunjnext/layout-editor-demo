@@ -7,7 +7,7 @@ import { EducationItem } from "@/lib/utils/types";
 import { Columns2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
-import type { Position } from "resume-layout-engine";
+import type { Position, Skill } from "resume-layout-engine";
 
 /**
  * React component for resume preview with automatic page splitting
@@ -127,6 +127,7 @@ export function ResumePreview() {
 
         const experiences = (formData.experience || []) as Position[];
         const education = (formData.education || []) as EducationItem[];
+        const skills = (formData.skills || []) as Skill[];
 
         // Add all experiences
         for (const experience of experiences) {
@@ -162,6 +163,15 @@ export function ResumePreview() {
             columnCount === 1 ? 0 : 1
           );
         }
+
+        // Add all skills
+        if (skills.length > 0) {
+          console.log(
+            "Adding skills to engine:",
+            JSON.stringify(skills, null, 2)
+          );
+          await engine.addSkills(skills);
+        }
       } catch (error) {
         console.error("Error updating resume:", error);
       } finally {
@@ -179,7 +189,7 @@ export function ResumePreview() {
     };
 
     updateResume();
-  }, [engine, isReady, formData]);
+  }, [engine, isReady, formData, columnCount]);
 
   return (
     <div className="w-full max-w-[794px] mx-auto space-y-6">

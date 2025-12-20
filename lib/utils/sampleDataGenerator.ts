@@ -1,11 +1,11 @@
 import {
-    randBoolean,
-    randCompanyName,
-    randJobTitle,
-    randNumber,
-} from '@ngneat/falso';
-import type { Position } from 'resume-layout-engine';
-import type { EducationItem } from './types';
+  randBoolean,
+  randCompanyName,
+  randJobTitle,
+  randNumber,
+} from "@ngneat/falso";
+import type { Position, Skill } from "resume-layout-engine";
+import type { EducationItem } from "./types";
 
 /**
  * Generates a random month in MM format
@@ -163,3 +163,110 @@ export function generateSampleEducations(count: number = 2): EducationItem[] {
   return educations;
 }
 
+/**
+ * Curated list of skills by category
+ */
+const skillsByCategory = {
+  "Programming Languages": [
+    "JavaScript",
+    "TypeScript",
+    "Python",
+    "Java",
+    "C++",
+    "Go",
+    "Rust",
+    "Swift",
+    "Kotlin",
+    "Ruby",
+  ],
+  "Frontend Development": [
+    "React",
+    "Vue.js",
+    "Angular",
+    "Next.js",
+    "HTML/CSS",
+    "Tailwind CSS",
+    "Redux",
+    "Webpack",
+  ],
+  "Backend Development": [
+    "Node.js",
+    "Express",
+    "Django",
+    "Flask",
+    "Spring Boot",
+    "FastAPI",
+    "GraphQL",
+    "REST APIs",
+  ],
+  "Databases": [
+    "PostgreSQL",
+    "MongoDB",
+    "MySQL",
+    "Redis",
+    "Elasticsearch",
+    "DynamoDB",
+  ],
+  "DevOps & Cloud": [
+    "AWS",
+    "Docker",
+    "Kubernetes",
+    "CI/CD",
+    "Jenkins",
+    "Terraform",
+    "Azure",
+    "GCP",
+  ],
+  "Tools & Technologies": [
+    "Git",
+    "Linux",
+    "Agile/Scrum",
+    "JIRA",
+    "Figma",
+    "Postman",
+  ],
+};
+
+/**
+ * Generates a sample skill entry with realistic data
+ */
+export function generateSampleSkill(): Skill {
+  // Get random category
+  const categories = Object.keys(skillsByCategory);
+  const category = categories[randNumber({ min: 0, max: categories.length - 1 })];
+
+  // Get random skill from that category
+  const skills = skillsByCategory[category as keyof typeof skillsByCategory];
+  const skillName = skills[randNumber({ min: 0, max: skills.length - 1 })];
+
+  return {
+    _id: crypto.randomUUID(),
+    name: skillName,
+    category: category,
+  };
+}
+
+/**
+ * Generates multiple sample skill entries
+ * Ensures variety by selecting from different categories
+ */
+export function generateSampleSkills(count: number = 8): Skill[] {
+  const skills: Skill[] = [];
+  const usedSkills = new Set<string>();
+
+  let attempts = 0;
+  const maxAttempts = count * 3; // Prevent infinite loop
+
+  while (skills.length < count && attempts < maxAttempts) {
+    attempts++;
+    const skill = generateSampleSkill();
+
+    // Avoid duplicates
+    if (!usedSkills.has(skill.name)) {
+      skills.push(skill);
+      usedSkills.add(skill.name);
+    }
+  }
+
+  return skills;
+}

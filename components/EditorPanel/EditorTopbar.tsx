@@ -7,7 +7,13 @@ import { useResume } from "@/hooks/useResume";
 import {
   generateSampleEducations,
   generateSampleExperiences,
+  generateSampleSkills,
 } from "@/lib/utils/sampleDataGenerator";
+import type {
+  EducationItem,
+  ExperienceItem,
+  SkillItem,
+} from "@/lib/utils/types";
 import { Sparkles, SquarePen } from "lucide-react";
 import type { ReactNode } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -36,11 +42,21 @@ export const CreateSampleDataButton = () => {
     // Generate sample data
     const sampleExperiences = generateSampleExperiences(3);
     const sampleEducations = generateSampleEducations(2);
+    const sampleSkills = generateSampleSkills(8);
 
     // Update resume with sample data
+    // Note: Type casting is needed because the form uses engine types (Position, Skill)
+    // while the Resume context uses legacy types (ExperienceItem, SkillItem)
     updateResume({
-      experience: [...(resume.experience || []), ...sampleExperiences],
-      education: [...(resume.education || []), ...sampleEducations],
+      experience: [
+        ...(resume.experience || []),
+        ...sampleExperiences,
+      ] as ExperienceItem[],
+      education: [
+        ...(resume.education || []),
+        ...sampleEducations,
+      ] as EducationItem[],
+      skills: [...(resume.skills || []), ...sampleSkills] as SkillItem[],
     });
 
     setTimeout(() => {
