@@ -36,6 +36,19 @@ export const Experience = () => {
     append(newExperience);
   };
 
+  const handleAddSampleExperience = () => {
+    const newExperience: Position = {
+      _id: crypto.randomUUID(),
+      title: "Software Engineer",
+      company: "Google",
+      description: [
+        "Developed and maintained web applications using React, Node.js, and MongoDB.",
+        "Collaborated with cross-functional teams to deliver high-quality software solutions.",
+      ],
+    };
+
+    append(newExperience);
+  };
   return (
     <Card className="ring-0 border border-dashed">
       <CardContent className="border-none">
@@ -68,6 +81,15 @@ export const Experience = () => {
           >
             <Plus size={16} />
             Add Experience
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleAddSampleExperience}
+            className="w-full"
+          >
+            Add Sample Experience
           </Button>
         </div>
       </CardContent>

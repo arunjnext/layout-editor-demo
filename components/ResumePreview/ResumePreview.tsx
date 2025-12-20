@@ -1,6 +1,8 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { useResumeLayout } from "@/hooks/useResumeLayout";
+import { Resume } from "@/lib/utils/defaultResume";
+import { EducationItem } from "@/lib/utils/types";
 import { useEffect, useRef } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import type { Position } from "resume-layout-engine";
@@ -27,20 +29,23 @@ import type { Position } from "resume-layout-engine";
 export function ResumePreview() {
   const { control } = useFormContext();
 
-  // Use useWatch for real-time updates on every keystroke
-  const experiences = useWatch({
+  // Watch the entire form for any changes
+  const formData = useWatch({
     control,
-    name: "experience",
-    defaultValue: [],
-  }) as Position[];
+    defaultValue: {
+      experience: [],
+      education: [],
+    },
+  });
 
   const { containerRef, engine, isReady, pageCount, remainingSpace } =
     useResumeLayout({
       page: {
-        width: 794, // A4 width at 96 DPI (210mm)
-        height: 1123, // A4 height at 96 DPI (297mm)
-        marginTop: 0,
-        marginBottom: 0,
+        // Content area width (794px - 60px left - 60px right = 674px)
+        width: 674,
+        height: 1123,
+        marginTop: 40,
+        marginBottom: 40,
         header: { height: 0 },
         footer: { height: 0 },
       },
@@ -49,6 +54,9 @@ export function ResumePreview() {
           fontFamily: "Arial, sans-serif",
           fontSize: "14px",
           lineHeight: 1.6,
+          columnCount: 2,
+          columnGap: 20,
+          columnWidths: [3, 2], // 60%/40% ratio
           spaces: {
             work: {
               marginTop: 16,
@@ -80,18 +88,17 @@ export function ResumePreview() {
   // Track ongoing update to prevent race conditions
   const updateInProgressRef = useRef(false);
   const pendingUpdateRef = useRef(false);
-  const prevExperiencesRef = useRef<Position[]>([]);
+  const prevFormDataRef = useRef<Partial<Resume>>(null);
 
-  // Add/update experiences when they change with race condition handling
+  // Single unified update function for the entire resume
   useEffect(() => {
     if (!engine || !isReady) return;
 
-    // Check if experiences have changed
-    const experiencesChanged =
-      JSON.stringify(prevExperiencesRef.current) !==
-      JSON.stringify(experiences);
+    // Check if form data has changed
+    const formDataChanged =
+      JSON.stringify(prevFormDataRef.current) !== JSON.stringify(formData);
 
-    if (!experiencesChanged) return;
+    if (!formDataChanged) return;
 
     // If an update is in progress, mark that we need another update
     if (updateInProgressRef.current) {
@@ -99,13 +106,16 @@ export function ResumePreview() {
       return;
     }
 
-    const updateExperiences = async () => {
+    const updateResume = async () => {
       updateInProgressRef.current = true;
-      prevExperiencesRef.current = experiences;
+      prevFormDataRef.current = formData;
 
       try {
         // Reset first to clear any existing content
         engine.reset();
+
+        const experiences = (formData.experience || []) as Position[];
+        const education = (formData.education || []) as EducationItem[];
 
         // Add all experiences
         for (const experience of experiences) {
@@ -118,34 +128,50 @@ export function ResumePreview() {
             ),
           };
 
-          // Debug: Log the experience data being sent to the engine
           console.log(
             "Adding experience to engine:",
             JSON.stringify(cleanedExperience, null, 2)
           );
-          await engine.addExperience(cleanedExperience);
+          await engine.addExperience(cleanedExperience, 0);
+        }
+
+        // Add all education items
+        for (const edu of education) {
+          await engine.addEducation(
+            {
+              _id: edu.id || `edu-${crypto.randomUUID()}`,
+              degree: edu.title || "",
+              institution: edu.subTitle || "",
+              year: edu.startYear || "",
+              description:
+                edu.description
+                  ?.split("\n")
+                  .filter((line: string) => line.trim()) || [],
+            },
+            1
+          );
         }
       } catch (error) {
-        console.error("Error updating experiences:", error);
+        console.error("Error updating resume:", error);
       } finally {
         updateInProgressRef.current = false;
 
         // If another update was requested while we were processing, do it now
         if (pendingUpdateRef.current) {
           pendingUpdateRef.current = false;
-          // Trigger another update by clearing the previous experiences ref
+          // Trigger another update by clearing the previous form data ref
           setTimeout(() => {
-            prevExperiencesRef.current = [];
+            prevFormDataRef.current = null;
           }, 0);
         }
       }
     };
 
-    updateExperiences();
-  }, [engine, isReady, experiences]);
+    updateResume();
+  }, [engine, isReady, formData]);
 
   return (
-    <div className="w-full max-w-[210mm] mx-auto space-y-6">
+    <div className="w-full max-w-[794px] mx-auto space-y-6">
       {/* Stats Card */}
       <Card>
         <CardContent>
@@ -160,10 +186,10 @@ export function ResumePreview() {
       {/* Resume Container - Fixed A4 Size */}
       <div
         ref={containerRef}
-        className="resume-container w-[210mm] min-h-[297mm] bg-white"
+        className="resume-container bg-white"
         style={{
-          width: "210mm",
-          minHeight: "297mm",
+          width: "794px",
+          minHeight: "1123px",
         }}
       />
     </div>

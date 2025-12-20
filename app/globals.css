@@ -136,15 +136,27 @@
   color: #333;
 }
 
+/* Prevent all content from overflowing */
+.resume-container * {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
+}
+
 /* Style any pages created by the engine */
+/* A4 dimensions at 96 DPI */
 .resume-container > div {
-  width: 210mm;
-  min-height: 297mm;
+  width: 794px;
+  min-height: 1123px;
   padding: 40px 60px;
   margin: 0 auto 20px;
   background: white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   position: relative;
+  overflow: hidden;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  box-sizing: border-box;
 }
 
 .resume-container > div:last-child {
@@ -157,6 +169,8 @@
 .resume-container section,
 .resume-container article {
   margin-bottom: 24px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 /* Style headings that the engine creates */
@@ -167,6 +181,8 @@
   margin: 0 0 8px 0;
   color: #2c3e50;
   font-weight: 700;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .resume-container h1 {
@@ -196,6 +212,8 @@
   line-height: 1.6;
   font-size: 14px;
   color: #444;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 /* Style lists */
@@ -238,6 +256,8 @@
 /* Print Styles */
 @media print {
   .resume-container > div {
+    width: 793.7px;
+    min-height: 1122.5px;
     box-shadow: none;
     margin: 0;
     page-break-after: always;
@@ -246,7 +266,7 @@
   .resume-container > div:last-child {
     page-break-after: auto;
   }
-  
+
   .resume-container {
     background: white;
   }
