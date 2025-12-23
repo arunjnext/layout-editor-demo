@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { cva, type VariantProps } from "class-variance-authority"
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
+import { cva, type VariantProps } from "class-variance-authority";
+import * as React from "react";
 
 const textVariants = cva("", {
   variants: {
@@ -26,27 +26,26 @@ const textVariants = cva("", {
     variant: "base",
     weight: "normal",
   },
-})
+});
 
 export interface TextProps
   extends React.HTMLAttributes<HTMLElement>,
     VariantProps<typeof textVariants> {
-  as?: "p" | "span" | "div" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
+  as?: "p" | "span" | "div" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 }
 
 const Text = React.forwardRef<HTMLElement, TextProps>(
   ({ className, variant, weight, as = "p", ...props }, ref) => {
-    const Component = as
+    const Component = as;
     return (
       <Component
-        ref={ref as any}
-        className={cn(textVariants({ variant, weight }), className)}
+        ref={ref as React.RefObject<HTMLParagraphElement>}
+        className={cn(textVariants({ variant, weight }), className) as string}
         {...props}
       />
-    )
+    );
   }
-)
-Text.displayName = "Text"
+);
+Text.displayName = "Text";
 
-export { Text, textVariants }
-
+export { Text, textVariants };
